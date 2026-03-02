@@ -1,0 +1,242 @@
+% lecture03.tex — STAT 212, Lecture 3: Radon–Nikodym Theorem Proof, Martingales
+
+\section*{Agenda}
+\begin{enumerate}
+    \item Radon--Nikodym Theorem
+    \item Martingales
+\end{enumerate}
+
+\noindent\textbf{Announcement.} Lectures in G125 from now on.
+
+%% ========================================================================
+\section{Radon--Nikodym Theorem (continued)}
+%% ========================================================================
+
+\subsection{Recap}
+
+So far: $(\Omega, \F, \Prob)$ is a measure (probability) space.
+$\mu, \nu$ are finite measures on $(\Omega, \F)$, with $\nu(S) \leq \mu(S)$ for all $S \in \F$.
+
+\medskip
+\noindent\textbf{To prove:} There exists $f : \Omega \to [0,1]$ such that
+\[
+    \nu(S) = \int_S f \dmu.
+\]
+
+\noindent\textbf{Have done:} Define
+\[
+    \cH = \left\{ f : \Omega \to [0,1] \text{ measurable} \;\Big|\; \int_S f \dmu \leq \nu(S) \;\; \forall\, S \in \F \right\}, \qquad
+    M = \sup_{f \in \cH} \int f \dmu.
+\]
+
+Then there exists $f_* \in \cH$ such that $\int f_* \dmu = M$.
+(Recall: $f_*$ was constructed as the pointwise limit of $\bar{f}_n$, where $\bar{f}_n = \max(f_1, \ldots, f_n)$ for a maximizing sequence $\{f_n\}$ in $\cH$.)
+
+\subsection{Proof that \texorpdfstring{$f_*$}{f*} achieves \texorpdfstring{$\nu$}{nu}}
+
+\begin{claim}{$f_*$ satisfies $\nu(S) = \int_S f_* \dmu$}{rn-claim}
+    For every $S \in \F$,
+    \[
+        \nu(S) = \int_S f_* \dmu.
+    \]
+\end{claim}
+
+\begin{proof}
+Suppose not. Then there exists $\bar{S} \in \F$ such that
+\[
+    \nu(\bar{S}) > \int_{\bar{S}} f_* \dmu.
+\]
+
+\noindent\textbf{Strategy:} Use $\bar{S}$ to construct $\hat{S} \in \F$ with $\mu(\hat{S}) > 0$ such that $f_* + \varepsilon \ind_{\hat{S}} \in \cH$.
+But then
+\[
+    \int (f_* + \varepsilon \ind_{\hat{S}}) \dmu > M,
+\]
+which is a contradiction.
+
+\medskip
+\noindent\textbf{Construction strategy:} Iterative construction, carving out bad sets at each step.
+
+\bigskip
+\noindent\textbf{Step 1: Observations.}
+
+\begin{enumerate}[label=(\roman*)]
+    \item \emph{Observation on $\bar{S}$:}
+    Since $\nu \leq \mu$ (by definition) and $f_* \in \cH$,
+    \[
+        \nu\bigl(S \cap \{f_* = 1\}\bigr) \leq \mu\bigl(S \cap \{f_* = 1\}\bigr), \quad \text{(by definition, } \nu \leq \mu\text{)},
+    \]
+    and
+    \[
+        \nu\bigl(S \cap \{f_* = 1\}\bigr) \geq \int_{S \cap \{f_* = 1\}} f_* \dmu = \mu\bigl(S \cap \{f_* = 1\}\bigr).
+    \]
+    So the deficit $\nu(\bar{S}) - \int_{\bar{S}} f_* \dmu$ is concentrated on $\bar{S} \cap \{f_* < 1\}$.
+
+    \item \emph{Shrinking to $S_0$:}
+    Start with $S_0 = \bar{S} \setminus \{f_* = 1\}$.
+    Let $F_n = \{f_* \leq 1 - \tfrac{1}{n}\}$. Then $F_n \uparrow \{f_* < 1\}$.
+
+    Since $\int_{\bar{S}} f_* \dmu < \nu(\bar{S})$, there exists $n_0$ large enough such that
+    \[
+        \int_{S \cap F_n} f_* \dmu < \nu(S \cap F_n), \qquad \forall\, n \geq n_0.
+    \]
+
+    So there exists $n$ large enough (set $\varepsilon = \varepsilon(n)$) such that:
+    \begin{enumerate}[label=(\alph*)]
+        \item $f_* + \varepsilon \ind_{S \cap F_n} \leq 1$ on $S \cap F_n$ (since $f_* \leq 1 - \tfrac{1}{n}$ on $F_n$, choosing $\varepsilon \leq \tfrac{1}{n}$),
+        \item $\int_{S \cap F_n} (f_* + \varepsilon \ind_{S \cap F_n}) \dmu < \nu(S \cap F_n)$.
+    \end{enumerate}
+
+    Setting $\bar{S} = S \cap F_n$, the function $f_* + \varepsilon \ind_{\bar{S}}$ seems like a good start.
+
+    \textbf{Issue:} Is $f_* + \varepsilon \ind_{\bar{S}} \in \cH$?
+    We need $\int_T (f_* + \varepsilon \ind_{\bar{S}}) \dmu \leq \nu(T)$ for all $T \in \F$, not just $T = \bar{S}$.
+\end{enumerate}
+
+\bigskip
+\noindent\textbf{Step 2: Shrinking $\bar{S}$ to $\hat{S}$.}
+
+\emph{Idea:} Need to ``shrink'' $\bar{S}$ to $\hat{S}$ so that $f_* + \varepsilon \ind_{\hat{S}} \in \cH$, i.e.,
+\[
+    \int_S (f_* + \varepsilon \ind_{\hat{S}}) \dmu \leq \nu(S), \qquad \forall\, S \in \F.
+\]
+
+\emph{Observation:} If $T \subseteq \bar{S}^c$, then
+\[
+    \int_T (f_* + \varepsilon \ind_{\bar{S}}) \dmu \leq \nu(T),
+\]
+since the indicator does not matter there. So we need to worry only about $T \subseteq \bar{S}$.
+
+\bigskip
+\noindent\textbf{Step 3: The Deficit.}
+
+\begin{definition}{Deficit}{deficit}
+    For $A \in \F$, define
+    \[
+        \mathrm{Def}_\varepsilon(A) = \nu(A) - \int_A (f_* + \varepsilon \ind_A) \dmu.
+    \]
+    Note that $\mathrm{Def}_\varepsilon$ is additive (as a function of $A$, for sets contained in $\bar{S}$).
+\end{definition}
+
+By construction, $\mathrm{Def}_\varepsilon(\bar{S}) > 0$.
+
+\medskip
+\emph{Idea:} If $T \subseteq \bar{S}$ violates the deficit, i.e., $\mathrm{Def}_\varepsilon(T) < 0$, then
+\[
+    \mathrm{Def}_\varepsilon(\bar{S} \setminus T) = \mathrm{Def}_\varepsilon(\bar{S}) - \mathrm{Def}_\varepsilon(T) > 0.
+\]
+
+So: we will progressively rule out the bad sets.
+
+\bigskip
+\noindent\textbf{Step 4: Progressive elimination of bad sets.}
+
+Define
+\[
+    a_k = \inf_{S_k} \mathrm{Def}_\varepsilon(S_k), \qquad S_k \subseteq \bar{S},
+\]
+where $S_k$ is chosen to be disjoint from the union of $S_1, \ldots, S_{k-1}$.
+
+Pick $S_k$ such that $\mathrm{Def}_\varepsilon(S_k) \leq a_k + \tfrac{1}{k}$.
+(Observe: $a_k \leq 0$ since $\emptyset$ is always allowed.)
+
+Define:
+\[
+    \hat{S} = \bar{S} \setminus \bigcup_{k \geq 1} S_k.
+\]
+
+Then $\mathrm{Def}_\varepsilon(\hat{S}) > 0$, which implies $\nu(\hat{S}) > 0$, hence $\mu(\hat{S}) > 0$.
+
+\bigskip
+\noindent\textbf{Step 5: Verifying $f_* + \varepsilon \ind_{\hat{S}} \in \cH$.}
+
+\begin{claim}{$f_* + \varepsilon \ind_{\hat{S}} \in \cH$}{fstar-in-H}
+    The function $f_* + \varepsilon \ind_{\hat{S}}$ belongs to $\cH$.
+\end{claim}
+
+Suppose not. Then there exists $T \subseteq \hat{S}$ such that
+\[
+    \int_T (f_* + \varepsilon \ind_{\hat{S}}) \dmu > \nu(T) + \delta
+\]
+for some $\delta > 0$, i.e., $\mathrm{Def}_\varepsilon(T) < -\delta$.
+
+Since $T \subseteq \hat{S}$, we have $T \cap S_k = \emptyset$ for all $k \geq 1$. So $T$ could have been used as $S_k$ for $k > 1/\delta$.
+
+But then for $k$ large enough,
+\[
+    S_k \cup T \implies \mathrm{Def}_\varepsilon(T \cup S_k) \leq \mathrm{Def}_\varepsilon(S_k) - \delta \leq a_k + \frac{1}{k} - \delta < a_k,
+\]
+where the last inequality holds for $k > 1/\delta$. This is a contradiction with the definition of $a_k$ as the infimum!
+
+\medskip
+Therefore $f_* + \varepsilon \ind_{\hat{S}} \in \cH$, and
+\[
+    \int (f_* + \varepsilon \ind_{\hat{S}}) \dmu > M,
+\]
+contradicting the definition of $M$. This completes the proof.
+\end{proof}
+
+%% ========================================================================
+\section{Conditional Probability and Conditional Distribution}
+%% ========================================================================
+
+So far: $(\Omega, \F, \Prob)$ probability space, $\G \subseteq \F$ a sub-$\sigma$-field.
+If $\E\abs{X} < \infty$, we can define $\E[X \mid \G]$.
+
+\medskip
+\noindent\textbf{Q.} What about conditional probability? We can use $\E[\ind_A \mid \G]$.
+
+\medskip
+\noindent\textbf{Q.} What about conditional distribution? Same idea, but need to worry a bit more about measure-zero sets. (More in Sections.)
+
+%% ========================================================================
+\section{Martingales}
+%% ========================================================================
+
+\subsection{Setup}
+
+$(\Omega, \F, \Prob)$ probability space. $\{\F_n : n \geq 1\}$ is a \emph{filtration}:
+\begin{itemize}
+    \item $\F_n$ is a $\sigma$-algebra, $\F_n \subseteq \F$,
+    \item $\F_n \subseteq \F_{n+1}$.
+\end{itemize}
+
+$\{X_n : n \geq 1\}$ is \emph{adapted} to $\F_n$, i.e.,
+\[
+    \{X_n \in A\} \in \F_n.
+\]
+
+\begin{definition}{Martingale, Sub-martingale, Super-martingale}{mart-def}
+    We say $\{(X_n, \F_n) : n \geq 1\}$ is a
+    \begin{enumerate}[label=(\roman*)]
+        \item \textbf{martingale} if $\E[X_{n+1} \mid \F_n] = X_n$,
+        \item \textbf{sub-martingale} if $\E[X_{n+1} \mid \F_n] \geq X_n$,
+        \item \textbf{super-martingale} if $\E[X_{n+1} \mid \F_n] \leq X_n$.
+    \end{enumerate}
+\end{definition}
+
+\begin{example}{Random walk martingale}{rw-mart}
+    Let $\varepsilon_i$ be i.i.d.\ with $\E[\varepsilon_i] = 0$ and $\E[\varepsilon_i^2] = 1$. Define
+    \[
+        S_k = \varepsilon_1 + \varepsilon_2 + \cdots + \varepsilon_k.
+    \]
+    Then $\{S_k\}$ is a martingale with respect to $\F_n = \sigma(\{S_0, S_1, \ldots, S_n\})$.
+\end{example}
+
+\subsection{Submartingale Convergence Theorem}
+
+\begin{theorem}{Submartingale Convergence Theorem}{submart-conv}
+    If $\{(X_n, \F_n) : n \geq 1\}$ is a sub-martingale with
+    \[
+        \sup_{n \geq 1} \E[X_n^+] < \infty,
+    \]
+    then $X_n \asto X_\infty$.
+\end{theorem}
+
+\noindent\textbf{Q.} What can we say about the limit? For example, what about $\E[X_\infty]$? $\E[X_\infty^m]$?
+
+\medskip
+\noindent\textbf{Naive hope:} If $\{X_n : n \geq 1\}$ is a martingale, then $\E[X_n] = \E[X_1]$ for all $n \geq 1$. Maybe $\E[X_n] = \E[X_\infty]$?
+
+\medskip
+Unfortunately no! Will need additional conditions. Next time.

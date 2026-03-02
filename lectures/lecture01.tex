@@ -1,0 +1,120 @@
+% lecture01.tex — Conditional Expectation
+
+\section{Topics}
+\begin{enumerate}
+    \item Conditional Expectation.
+    \item Radon--Nikodym Theorem.
+\end{enumerate}
+
+\section{Course Overview and Goals}
+
+\textbf{Q.} What is this course about?
+
+\textit{Stochastic Processes} $\{X_t : t \in \T\}$, $X_t \in \cS$ --- state space, $\T$ --- index set.
+
+\textbf{Q.} Why care about stochastic processes? --- \textit{To model \& predict dynamics occurring in the physical world, e.g.\ weather dynamics, infection counts, stock prices, etc.}
+
+\textit{Interest: Can we predict future behavior? Can we use dynamics to produce ``samples'' of interest? --- applications in Gen AI.}
+
+\textit{Our approach in this course:} Focus on Brownian Motion \& allied stochastic processes.
+
+\textit{Why? BM is a canonical stochastic process with many fascinating properties. Using It\^o calculus, we can construct many other stochastic properties from BM.}
+
+\textit{Finally: The techniques \& principles we learn can be widely used to study other stochastic processes.}
+
+\textit{Before diving into a systematic study of BM, we have to build up some technical foundations.}
+
+\section{Review (and Generalization) of Conditional Expectation}
+
+\subsection{Simple Definition}
+
+\begin{definition}{Conditional Expectation (Simple)}{cond-exp-simple}
+    Let $X, Y$ be random variables with $\E\abs{Y} < \infty$. The \emph{conditional expectation} $\E[Y \mid X]$ is the (almost surely) unique function $g(X)$ that uncorrelates $Y - g(X)$ from $h(X)$ for all bounded, measurable $h \colon \R \to \R$. Formally,
+    \[
+        \E\bigl[(Y - g(X)) h(X)\bigr] = 0.
+    \]
+\end{definition}
+
+\subsection{Limitations}
+
+\begin{enumerate}[label=(\roman*)]
+    \item The previous definition works if $X \in \R^n$ for some $n \geq 1$. In working with continuous-time stochastic processes, we want to define quantities like $\E\bigl[X_{t+h} \mid \{X_s : s \leq t\}\bigr]$.
+
+    \textbf{Q.} How to make sense of this?
+
+    \item Existence \& uniqueness of stochastic conditional expectations? (Can use $L^2$-projection if $\E Y^2 < \infty$, but general construction is more involved.)
+\end{enumerate}
+
+\subsection{General Definition of Conditional Expectation}
+
+\begin{definition}{Conditional Expectation (General)}{cond-exp-general}
+    Let $(\Omega, \F, \Prob)$ be a probability space. $X \colon (\Omega, \F) \to (\R, \B_\R)$ is measurable and $\E\abs{X} < \infty$. Let $\G \subseteq \F$ be a sub-$\sigma$-field.
+
+    Then $\E[X \mid \G]$ is the unique (up to measure zero) $\G$-measurable function such that
+    \[
+        \E[X \ind_A] = \E\bigl[\E[X \mid \G] \ind_A\bigr] \quad \forall\, A \in \G.
+    \]
+\end{definition}
+
+\begin{remark}{}{general-def-remarks}
+    \begin{enumerate}[label=(\arabic*)]
+        \item This definition generalizes the simple definition (Definition~\ref{def:cond-exp-simple}), once we take $\G = \sigma(X)$.
+        \item For continuous-time stochastic processes, we can work with
+        \[
+            \E\bigl[X_{t+h} \mid \sigma(\{X_s : s \leq t\})\bigr].
+        \]
+    \end{enumerate}
+\end{remark}
+
+\textbf{Q.} Existence \& uniqueness? --- \textit{We will come back to this.}
+
+\section{Properties of Conditional Expectation}
+
+\begin{theorem}{Properties of Conditional Expectation}{cond-exp-properties}
+    Let $X, Y$ satisfy $\E\abs{X}, \E\abs{Y} < \infty$.
+    \begin{enumerate}[label=(\alph*)]
+        \item \textbf{(Linearity)} $\E[aX + Y \mid \G] = a\,\E[X \mid \G] + \E[Y \mid \G]$.
+        \item \textbf{(Monotonicity)} $X \leq Y \implies \E[X \mid \G] \leq \E[Y \mid \G]$.
+        \item \textbf{(Monotone Convergence)} $X_n \geq 0$, $X_n \uparrow X$, $\E X < \infty$
+        \[
+            \implies \E[X_n \mid \G] \uparrow \E[X \mid \G].
+        \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    See Theorem~4.1.9 (Durrett).
+\end{proof}
+
+\begin{theorem}{Jensen's Inequality for Conditional Expectation}{jensen-cond-exp}
+    Let $\varphi \colon \R \to \R$ be convex. Then
+    \[
+        \E[\varphi(X) \mid \G] \geq \varphi\bigl(\E[X \mid \G]\bigr).
+    \]
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+    (See Durrett Theorem~4.1.10 for full proof.)
+
+    Assume $\varphi$ is differentiable and $\E\bigl[\abs{\varphi'(\E[X \mid \G])}\bigr] < \infty$ (or $\abs{\varphi'(x)} \leq 1$ for all $x$). By convexity,
+    \[
+        \varphi(X) \geq \varphi\bigl(\E[X \mid \G]\bigr) + \varphi'\bigl(\E[X \mid \G]\bigr)\bigl(X - \E[X \mid \G]\bigr).
+    \]
+    Taking conditional expectations,
+    \[
+        \E[\varphi(X) \mid \G] \geq \varphi\bigl(\E[X \mid \G]\bigr).
+    \]
+
+    \textit{Extending to the general case requires some properties of convex functions.}
+\end{proof}
+
+\begin{corollary}{}{jensen-corollaries}
+    \begin{enumerate}[label=(\arabic*)]
+        \item $\abs{\E[X \mid \G]} \leq \E[\abs{X} \mid \G]$. \quad --- Use Jensen's inequality on $\varphi(x) = \abs{x}$.
+        \item $X_1, \ldots, X_n \Lpto{1} X \implies \E[X_n \mid \G] \Lpto{1} \E[X \mid \G]$.
+    \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+    For (2): $X_n \Lpto{1} X \implies \E\bigl[\abs{X - X_n} \mid \G\bigr] \Lpto{1} 0 \implies \E[X_n \mid \G] \Lpto{1} \E[X \mid \G]$.
+\end{proof}

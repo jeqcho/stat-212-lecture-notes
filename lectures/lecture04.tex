@@ -1,0 +1,234 @@
+% lecture04.tex — Uniform Integrability, L^1-Convergence of Martingales
+
+\section{Agenda}
+\begin{enumerate}
+    \item Uniform Integrability.
+    \item $L^1$-convergence of martingales.
+\end{enumerate}
+
+\section{Recall: Martingale Convergence}
+
+Recall the \emph{Martingale Convergence Theorem}: if $\{(X_n, \F_n) : n \geq 1\}$ is a martingale, set
+\[
+    M = \sup_{n \geq 1} \E\abs{X_n} \;\;(\leq \infty).
+\]
+Define
+\[
+    X_\infty(\omega) =
+    \begin{cases}
+        \lim_{n \to \infty} X_n(\omega) & \text{if the limit exists},\\
+        0 & \text{otherwise}.
+    \end{cases}
+\]
+
+\begin{theorem}{$L^1$-Convergence of Martingales (TFAE)}{l1-mart-tfae}
+    The following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item $M < \infty$ and $X_n \asto X_\infty$.
+        \item $\E[X_\infty \mid \F_n] = X_n$.
+        \item $M < \infty$ and $\E\abs{X_\infty} = \lim_{n \to \infty} \E\abs{X_n}$.
+        \item $\{X_n : n \geq 1\}$ is uniformly integrable.
+    \end{enumerate}
+\end{theorem}
+
+\textbf{Q.} What is uniform integrability?
+
+\section{Uniform Integrability}
+
+\begin{definition}{Uniform Integrability}{ui}
+    A collection $S \subseteq L^1(\Omega, \F, \Prob)$ is \emph{uniformly integrable} (UI) if for every $\varepsilon > 0$, there exists $c > 0$ such that
+    \[
+        \sup_{X \in S} \E\bigl[\abs{X} \ind(\abs{X} > c)\bigr] < \varepsilon.
+    \]
+    Note: the same $c$ works for all $X \in S$.
+\end{definition}
+
+\begin{remark}{}{ui-any-x}
+    For any single $X \in L^1$, we have $\E[\abs{X}\ind(\abs{X} > c)] \to 0$ as $c \to \infty$ (by the dominated convergence theorem). Uniform integrability requires this convergence to be \emph{uniform} over $S$.
+\end{remark}
+
+\subsection{Exercise: UI Implies $L^1$-Bounded}
+
+\textbf{Exercise.} If $S \subseteq L^1(\Omega, \F, \Prob)$ is UI, then $S$ is $L^1$-bounded (i.e., $\sup_{X \in S} \E\abs{X} < \infty$).
+
+Give a counterexample to show that the opposite implication is false.
+
+\textbf{Q.} Which $L^1$-bounded subsets are UI?
+
+\subsection{Characterization of Uniform Integrability}
+
+\begin{lemma}{Characterization of UI}{ui-char}
+    $S \subseteq L^1(\Omega, \F, \Prob)$ is UI if and only if
+    \begin{enumerate}[label=(\alph*)]
+        \item $S$ is $L^1$-bounded, and
+        \item (\emph{uniform absolute continuity}) for every $\varepsilon > 0$, there exists $\delta > 0$ such that for all $f \in S$ and all $A \in \F$ with $\Prob(A) < \delta$,
+        \[
+            \int_A \abs{f} \dP < \varepsilon.
+        \]
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    \textbf{($\text{UI} \implies (a) + (b)$):}
+
+    First, UI $\implies$ $L^1$-bounded, giving (a).
+
+    For (b): let $\varepsilon > 0$. We have
+    \[
+        \E\bigl[\abs{f} \ind_A\bigr]
+        = \E\bigl[\abs{f} \ind_{\{\abs{f} \leq c\} \cap A}\bigr]
+          + \E\bigl[\abs{f} \ind_{\{\abs{f} > c\} \cap A}\bigr]
+        \leq c \cdot \delta + \sup_{f \in S} \E\bigl[\abs{f} \ind_{\{\abs{f} > c\}}\bigr].
+    \]
+    Choose $c$ such that the second term (using UI) is $< \varepsilon/2$. Then choose $\delta$ such that $c \cdot \delta < \varepsilon/2$, giving $\text{RHS} < \varepsilon$.
+
+    \medskip
+
+    \textbf{($(a) + (b) \implies \text{UI}$):}
+
+    Since $S$ is $L^1$-bounded,
+    \[
+        \Prob\bigl(\abs{f} > c\bigr) \leq \frac{\sup_{f \in S} \E\abs{f}}{c} < \delta
+    \]
+    for $c$ large enough. Then by (b),
+    \[
+        \E\bigl[\abs{f} \ind_{\{\abs{f} > c\}}\bigr] < \varepsilon. \qedhere
+    \]
+\end{proof}
+
+\section{Examples of UI Collections}
+
+\begin{lemma}{Conditional Expectations Are UI}{cond-exp-ui}
+    Let $X \in L^1(\Omega, \F, \Prob)$. Define
+    \[
+        S = \bigl\{\E[X \mid \G] : \G \subseteq \F \text{ is a sub-}\sigma\text{-algebra}\bigr\}.
+    \]
+    Then $S$ is UI.
+\end{lemma}
+
+\begin{proof}
+    First, $S$ is $L^1$-bounded since by Jensen's inequality,
+    \[
+        \E\abs{\E[X \mid \G]} \leq \E\abs{X}.
+    \]
+    Next, by Jensen's inequality,
+    \[
+        \E\bigl[\abs{\E[X \mid \G]} \ind\bigl(\abs{\E[X \mid \G]} \geq c\bigr)\bigr]
+        \leq \E\bigl[\abs{X} \ind\bigl(\abs{\E[X \mid \G]} \geq c\bigr)\bigr].
+    \]
+    But
+    \[
+        \Prob\bigl(\abs{\E[X \mid \G]} \geq c\bigr) \leq \frac{\E\abs{X}}{c} < \delta
+    \]
+    for $c$ large enough. So
+    \[
+        \sup_{S} \E\bigl[\abs{\E[X \mid \G]} \ind\bigl(\abs{\E[X \mid \G]} \geq c\bigr)\bigr]
+        \leq \sup_S \E\bigl[\abs{X} \ind\bigl(\abs{\E[X \mid \G]} \geq c\bigr)\bigr].
+    \]
+
+    \textbf{Claim:} RHS $\to 0$ as $c \to \infty$.
+
+    Suppose not. Then there exist $\G_n$ and $c_n \uparrow \infty$ such that
+    \[
+        \E\bigl[\abs{X} \ind\bigl(\abs{\E[X \mid \G_n]} \geq c_n\bigr)\bigr] > \varepsilon.
+    \]
+    Let $Y_n = \abs{X} \ind\bigl(\abs{\E[X \mid \G_n]} \geq c_n\bigr) \leq \abs{X}$. Since $\E\abs{X} < \infty$ and $Y_n \pto 0$ (because $\Prob(\abs{\E[X \mid \G_n]} \geq c_n) \to 0$), the dominated convergence theorem gives $\E[Y_n] \to 0$, a contradiction.
+\end{proof}
+
+\begin{lemma}{$L^p$-Bounded Implies UI}{lp-bounded-ui-examples}
+    If $S \subseteq L^1(\Omega, \F, \Prob)$ is $L^p$-bounded for some $p > 1$ (i.e., $\sup_{X \in S} \E\abs{X}^p < \infty$), then $S$ is UI.
+\end{lemma}
+
+\begin{proof}
+    By the Cauchy--Schwarz inequality (more precisely, H\"older's inequality with exponents $p$ and $p/(p-1)$, applied to the case $p = 2$ for simplicity):
+    \[
+        \E\bigl[\abs{X} \ind(\abs{X} > c)\bigr]
+        \leq \sqrt{\E X^2 \cdot \Prob(\abs{X} > c)}
+        \leq \sqrt{M^2 \cdot \frac{\E X^2}{c}}
+        = \frac{M^2}{\sqrt{c}}
+        \to 0
+    \]
+    as $c \to \infty$, where $M^2 = \sup_{X \in S} \E X^2$.
+
+    More generally, for $p > 1$:
+    \[
+        \E\bigl[\abs{X} \ind(\abs{X} > c)\bigr]
+        \leq \frac{\E\abs{X}^p}{c^{p-1}}
+        \leq \frac{M^p}{c^{p-1}} \to 0.
+    \]
+
+    \textbf{NB:} The same proof works if $S$ is $L^{1+\varepsilon}$-bounded for any $\varepsilon > 0$.
+\end{proof}
+
+\section{Why Care About Uniform Integrability?}
+
+\textbf{Q.} Why care about UI?
+
+\textbf{A.} UI $+$ a.s.\ convergence $\implies$ $L^1$-convergence.
+
+\begin{theorem}{UI and $L^1$-Convergence (TFAE)}{ui-l1-conv}
+    Let $X_n \in L^1$ and $X_n \asto X$. Then the following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item $\{X_n : n \geq 1\}$ is UI.
+        \item $X \in L^1$ and $X_n \Lpto{1} X$.
+        \item $X \in L^1$ and $\E\abs{X_n} \to \E\abs{X}$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \textbf{(i) $\implies$ (ii):} Define the truncation
+    \[
+        X_n^c = X_n \ind(\abs{X_n} \leq c), \qquad X^c = X \ind(\abs{X} < c).
+    \]
+    Note that $\E\abs{X} \leq \liminf \E\abs{X_n} < \infty$ (since UI implies $L^1$-bounded), so $X \in L^1$.
+
+    We write
+    \[
+        \abs{X_n - X}
+        \leq \abs{X_n^c - X^c} + \abs{X_n} \ind(\abs{X_n} \geq c) + \abs{X} \ind(\abs{X} \geq c).
+    \]
+    Taking expectations,
+    \[
+        \E\abs{X_n - X}
+        \leq \underbrace{\E\abs{X_n^c - X^c}}_{\to\, 0 \text{ by DCT}}
+        + \underbrace{\E\bigl[\abs{X_n} \ind(\abs{X_n} \geq c)\bigr]}_{\to\, 0 \text{ by UI}}
+        + \underbrace{\E\bigl[\abs{X} \ind(\abs{X} \geq c)\bigr]}_{\to\, 0 \text{ by DCT}}.
+    \]
+    For the first term, $\abs{X_n^c - X^c} \leq 2c$ and $X_n^c \to X^c$ a.s., so by the dominated convergence theorem, $\E\abs{X_n^c - X^c} \to 0$ as $n \to \infty$.
+
+    For the second term, UI gives $\sup_n \E[\abs{X_n} \ind(\abs{X_n} \geq c)] \to 0$ as $c \to \infty$.
+
+    For the third term, $\E[\abs{X} \ind(\abs{X} \geq c)] \to 0$ as $c \to \infty$ by DCT.
+
+    So: send $n \to \infty$, then $c \to \infty$.
+
+    \medskip
+
+    \textbf{(ii) $\implies$ (iii):} This is immediate since
+    \[
+        \bigl|\abs{X_n} - \abs{X}\bigr| \leq \abs{X_n - X},
+    \]
+    so $\E\abs{X_n} \to \E\abs{X}$.
+
+    \medskip
+
+    \textbf{(iii) $\implies$ (i):} We have
+    \[
+        \E\bigl[\abs{X_n} \ind(\abs{X_n} > c)\bigr]
+        = \E\abs{X_n} - \E\bigl[\abs{X_n} \ind(\abs{X_n} \leq c)\bigr].
+    \]
+    As $n \to \infty$:
+    \begin{itemize}
+        \item $\E\abs{X_n} \to \E\abs{X}$ by assumption.
+        \item $\E[\abs{X_n} \ind(\abs{X_n} \leq c)] \to \E[\abs{X} \ind(\abs{X} \leq c)]$ (since $\abs{X_n} \ind(\abs{X_n} \leq c) \leq c$ and converges a.s.; apply DCT --- here we choose $c$ to be a continuity point of $X$, i.e., $\Prob(\abs{X} = c) = 0$).
+    \end{itemize}
+    Therefore,
+    \[
+        \E\bigl[\abs{X_n} \ind(\abs{X_n} > c)\bigr] \to \E\abs{X} - \E\bigl[\abs{X} \ind(\abs{X} \leq c)\bigr] = \E\bigl[\abs{X} \ind(\abs{X} > c)\bigr].
+    \]
+    Now let $c \to \infty$ to get the desired claim: $\E[\abs{X} \ind(\abs{X} > c)] \to 0$, giving uniform integrability.
+\end{proof}
+
+\medskip
+
+\textit{Next time: UI \& Martingale convergence.}

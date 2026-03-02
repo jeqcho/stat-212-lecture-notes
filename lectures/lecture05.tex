@@ -1,0 +1,201 @@
+% Lecture 5: L^1-Convergence of Martingales (cont.), L^p-Convergence, Doob's Inequalities
+
+\section*{Agenda}
+\begin{enumerate}
+    \item $L^1$-convergence of martingales.
+    \item $L^p$-convergence ($p > 1$).
+\end{enumerate}
+
+\section*{Announcements}
+\begin{enumerate}
+    \item PSET 1 due Friday.
+    \item Survey.
+\end{enumerate}
+
+%────────────────────────────────────────────────────────────────
+\section{Recall from Last Time}
+%────────────────────────────────────────────────────────────────
+
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Uniformly integrable (UI) collections.} A collection $\{X_\alpha\}$ is UI if it is $L^1$-bounded and satisfies uniform absolute continuity: for every $\varepsilon > 0$ there exists $M > 0$ such that
+    \[
+        \sup_\alpha \E\bigl[\abs{X_\alpha} \ind(\abs{X_\alpha} > M)\bigr] < \varepsilon.
+    \]
+
+    \item \textbf{Connection between a.s.\ convergence, $L^1$-convergence, and UI} (Durrett, Theorem 4.6.3):
+
+    If $X_n \asto X_\infty$, then $X_n \Lpto{1} X_\infty$ if and only if $\{X_n : n \geq 1\}$ is UI.
+\end{enumerate}
+
+%────────────────────────────────────────────────────────────────
+\section{\texorpdfstring{$L^1$}{L1}-Convergence of Martingales}
+%────────────────────────────────────────────────────────────────
+
+\begin{theorem}{\texorpdfstring{$L^1$}{L1}-Convergence of Martingales}{l1-mart-conv}
+    Let $\{(X_n, \F_n) : n \geq 1\}$ be a martingale. Let $M = \sup_{n} \E\abs{X_n}$ $(\leq \infty)$. The following are equivalent:
+    \begin{enumerate}[label=(\roman*)]
+        \item $M < \infty$ and $X_n \xrightarrow{\text{a.s.}, L^1} X_\infty$.
+        \item $\E[X_\infty \mid \F_n] = X_n$ for all $n \geq 1$.
+        \item $M < \infty$ and $\E\abs{X_\infty} = \lim_{n \to \infty} \E\abs{X_n}$.
+        \item $\{X_n : n \geq 1\}$ is UI.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    We prove a cycle of implications: (i) $\Rightarrow$ (ii) $\Rightarrow$ (iv) $\Rightarrow$ (iii) $\Rightarrow$ (i).
+
+    \medskip
+    \textbf{(i) $\Rightarrow$ (ii):}
+    For all $A \in \F_n$, by the martingale property,
+    \[
+        \E[X_{n+k} \ind_A] = \E[X_n \ind_A] \quad \forall\, k \geq 0.
+    \]
+    As $k \to \infty$, we have $X_{n+k} \ind_A \xrightarrow{\text{a.s.}, L^1} X_\infty \ind_A$ (since $X_{n+k} \xrightarrow{\text{a.s.}, L^1} X_\infty$ by assumption). Therefore,
+    \[
+        \lim_{k \to \infty} \E[X_{n+k} \ind_A] = \E[X_\infty \ind_A] = \E[X_n \ind_A] \quad \forall\, A \in \F_n.
+    \]
+    This shows $\E[X_\infty \mid \F_n] = X_n$.
+
+    \medskip
+    \textbf{(ii) $\Rightarrow$ (iv):}
+    By (ii), $X_n = \E[X_\infty \mid \F_n]$ for all $n \geq 1$. The collection $\{\E[X_\infty \mid \F_n] : n \geq 1\}$ is UI (proved last time).
+
+    \medskip
+    \textbf{(iv) $\Rightarrow$ (iii):}
+    Since $\{X_n\}$ is UI, in particular $M = \sup_n \E\abs{X_n} < \infty$. By the Martingale Convergence Theorem (since $M < \infty$), $X_n \asto X_\infty$. Since $\{X_n\}$ is UI and $X_n \asto X_\infty$, by the connection between UI and $L^1$-convergence (Durrett, Theorem 4.6.3), $X_n \Lpto{1} X_\infty$. In particular, $\E\abs{X_n} \to \E\abs{X_\infty}$.
+
+    \medskip
+    \textbf{(iii) $\Rightarrow$ (i):}
+    Since $M < \infty$, the Martingale Convergence Theorem gives $X_n \asto X_\infty$. We have $\E\abs{X_\infty} = \lim_n \E\abs{X_n}$. By the theorem from last time (a.s.\ convergence plus convergence of norms implies $L^1$-convergence), $X_n \Lpto{1} X_\infty$.
+\end{proof}
+
+%────────────────────────────────────────────────────────────────
+\section{\texorpdfstring{$L^p$}{Lp}-Convergence of Martingales (\texorpdfstring{$p > 1$}{p>1})}
+%────────────────────────────────────────────────────────────────
+
+\begin{theorem}{\texorpdfstring{$L^p$}{Lp}-Convergence of Martingales}{lp-mart-conv}
+    Let $\{(X_n, \F_n) : n \geq 1\}$ be a martingale. Suppose
+    \[
+        \sup_n \norm{X_n}_p = \sup_n \bigl(\E\abs{X_n}^p\bigr)^{1/p} < \infty \quad (:= M).
+    \]
+    Then $X_n \xrightarrow{\text{a.s.}, L^p} X_\infty$.
+\end{theorem}
+
+The proof relies on two lemmas.
+
+\begin{lemma}{\texorpdfstring{$L^p$}{Lp}-Boundedness Implies UI}{lp-bounded-ui}
+    If $S \subseteq L^1$ is $L^p$-bounded for some $p > 1$ (i.e., $\sup_{X \in S} \E\abs{X}^p < \infty$), then $S$ is uniformly integrable.
+\end{lemma}
+
+\begin{lemma}{Maximal Function in \texorpdfstring{$L^p$}{Lp}}{maximal-lp}
+    Let $\{(X_n, \F_n) : n \geq 1\}$ be an $L^p$-bounded martingale. Define $X^* = \sup_{n \geq 1} \abs{X_n}$. Then $X^* \in L^p$.
+\end{lemma}
+
+\subsection{Proof of the Theorem Assuming the Lemmas}
+
+\begin{proof}
+    By Lemma~\ref{lem:lp-bounded-ui}, $L^p$-boundedness implies $\{X_n\}$ is UI. By Theorem~\ref{thm:l1-mart-conv} (the $L^1$-convergence theorem, implication (iv) $\Rightarrow$ (i)), $X_n \xrightarrow{\text{a.s.}, L^1} X_\infty$.
+
+    It remains to boost from $L^1$ to $L^p$. We have $\abs{X_n - X_\infty}^p \to 0$ a.s.\ and $\abs{X_n - X_\infty}^p \leq (2X^*)^p$, where $X^* = \sup_n \abs{X_n} \in L^p$ by Lemma~\ref{lem:maximal-lp}. By the Dominated Convergence Theorem,
+    \[
+        \E\abs{X_n - X_\infty}^p \to 0,
+    \]
+    so $X_n \Lpto{p} X_\infty$.
+\end{proof}
+
+%────────────────────────────────────────────────────────────────
+\section{Doob's Inequalities}
+%────────────────────────────────────────────────────────────────
+
+\begin{theorem}{Doob's Maximal Inequality}{doob-maximal}
+    Let $\{(X_n, \F_n) : 0 \leq n \leq N\}$ be a submartingale (i.e., $\E[X_{n+1} \mid \F_n] \geq X_n$). Then for $\lambda > 0$,
+    \[
+        \lambda \, \Prob\Bigl[\max_{0 \leq j \leq N} X_j \geq \lambda\Bigr] \leq \E\Bigl[X_N \ind\Bigl(\max_{0 \leq j \leq N} X_j \geq \lambda\Bigr)\Bigr] \leq \E\abs{X_N}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Define the disjoint events
+    \[
+        A_i = \{X_0 < \lambda, \, X_1 < \lambda, \, \ldots, \, X_{i-1} < \lambda, \, X_i \geq \lambda\}, \quad 0 \leq i \leq N.
+    \]
+    Note $A_i \in \F_i$ and the $A_i$ are disjoint. Moreover,
+    \[
+        \Bigl\{\max_{0 \leq j \leq N} X_j \geq \lambda\Bigr\} = \bigsqcup_{i=0}^{N} A_i.
+    \]
+    On the event $A_i$, we have $X_i \geq \lambda$. By the submartingale property, $\E[X_N \mid \F_i] \geq X_i$, so
+    \[
+        \E[X_N \ind_{A_i}] \geq \E[X_i \ind_{A_i}] \geq \lambda \, \Prob(A_i).
+    \]
+    Summing over $i = 0, 1, \ldots, N$:
+    \[
+        \E\Bigl[X_N \ind\Bigl(\max_{0 \leq j \leq N} X_j \geq \lambda\Bigr)\Bigr] = \sum_{i=0}^{N} \E[X_N \ind_{A_i}] \geq \lambda \sum_{i=0}^{N} \Prob(A_i) = \lambda \, \Prob\Bigl[\max_{0 \leq j \leq N} X_j \geq \lambda\Bigr].
+    \]
+    This establishes the first inequality. The second inequality follows since $X_N \ind(\cdot) \leq \abs{X_N}$.
+\end{proof}
+
+\begin{theorem}{Doob's \texorpdfstring{$L^p$}{Lp}-Inequality}{doob-lp}
+    Suppose $U, V \geq 0$ are random variables satisfying
+    \[
+        \lambda \, \Prob[U \geq \lambda] \leq \E[V \ind(U \geq \lambda)] \quad \forall\, \lambda > 0.
+    \]
+    Then for $p > 1$,
+    \[
+        \norm{U}_p \leq \frac{p}{p-1} \norm{V}_p.
+    \]
+\end{theorem}
+
+\begin{proof}
+    We compute $\E[U^p]$ using the layer-cake representation and the hypothesis. We have
+    \[
+        \E[U^p] = \int_0^\infty p \lambda^{p-1} \Prob[U \geq \lambda] \, d\lambda \leq \int_0^\infty p \lambda^{p-2} \E[V \ind(U \geq \lambda)] \, d\lambda,
+    \]
+    where we used $\lambda \Prob[U \geq \lambda] \leq \E[V \ind(U \geq \lambda)]$, dividing both sides by $\lambda$ and multiplying by $p\lambda^{p-1}$.
+
+    By Fubini's theorem,
+    \[
+        \int_0^\infty p \lambda^{p-2} \E[V \ind(U \geq \lambda)] \, d\lambda = \E\Bigl[V \int_0^U p \lambda^{p-2} \, d\lambda\Bigr] = \E\Bigl[V \cdot \frac{p}{p-1} U^{p-1}\Bigr] = \frac{p}{p-1} \E[V U^{p-1}].
+    \]
+    Now apply H\"older's inequality with exponents $p$ and $q = \frac{p}{p-1}$:
+    \[
+        \E[V U^{p-1}] \leq \norm{V}_p \cdot \norm{U^{p-1}}_q = \norm{V}_p \cdot \bigl(\E[U^{(p-1)q}]\bigr)^{1/q} = \norm{V}_p \cdot \bigl(\E[U^p]\bigr)^{(p-1)/p}.
+    \]
+    Therefore,
+    \[
+        \E[U^p] \leq \frac{p}{p-1} \norm{V}_p \cdot \bigl(\E[U^p]\bigr)^{(p-1)/p}.
+    \]
+    We consider three cases:
+    \begin{enumerate}[label=(\arabic*)]
+        \item If $\E[U^p] = 0$, the result is trivial.
+        \item If $0 < \E[U^p] < \infty$, divide both sides by $(\E[U^p])^{(p-1)/p}$:
+        \[
+            \bigl(\E[U^p]\bigr)^{1/p} \leq \frac{p}{p-1} \norm{V}_p,
+        \]
+        which gives $\norm{U}_p \leq \frac{p}{p-1} \norm{V}_p$.
+        \item If $\E[U^p] = \infty$, truncate: apply the argument to $U \wedge K$ (which is bounded, so case (2) applies), obtaining
+        \[
+            \norm{U \wedge K}_p \leq \frac{p}{p-1} \norm{V}_p.
+        \]
+        Send $K \to \infty$; by Monotone Convergence, $\norm{U}_p \leq \frac{p}{p-1} \norm{V}_p$. (If the right-hand side is infinite, the inequality holds trivially.)
+    \end{enumerate}
+\end{proof}
+
+%────────────────────────────────────────────────────────────────
+\subsection{Proof of Lemma~\ref{lem:maximal-lp}}
+%────────────────────────────────────────────────────────────────
+
+\begin{proof}
+    Let $\{(X_n, \F_n) : n \geq 1\}$ be an $L^p$-bounded martingale. Since $\abs{X_n}$ is a submartingale (by Jensen's inequality), Doob's maximal inequality gives: for each $N$,
+    \[
+        \lambda \, \Prob\Bigl[\max_{1 \leq j \leq N} \abs{X_j} \geq \lambda\Bigr] \leq \E\Bigl[\abs{X_N} \ind\Bigl(\max_{1 \leq j \leq N} \abs{X_j} \geq \lambda\Bigr)\Bigr].
+    \]
+    Set $U_N = \max_{1 \leq j \leq N} \abs{X_j}$ and $V_N = \abs{X_N}$. The hypothesis of Doob's $L^p$-inequality (Theorem~\ref{thm:doob-lp}) is satisfied, so
+    \[
+        \norm{U_N}_p \leq \frac{p}{p-1} \norm{X_N}_p \leq \frac{p}{p-1} M.
+    \]
+    As $N \to \infty$, $U_N \uparrow X^* = \sup_{n \geq 1} \abs{X_n}$. By Monotone Convergence,
+    \[
+        \norm{X^*}_p = \lim_{N \to \infty} \norm{U_N}_p \leq \frac{p}{p-1} M < \infty.
+    \]
+    Hence $X^* \in L^p$.
+\end{proof}

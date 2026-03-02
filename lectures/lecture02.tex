@@ -1,0 +1,179 @@
+% Lecture 2: Conditional Expectation — Existence & Uniqueness, Radon–Nikodym Theorem
+
+\section*{Agenda}
+\begin{enumerate}[label=(\roman*)]
+    \item Conditional Expectation: Existence \& Uniqueness.
+    \item Radon--Nikodym Theorem.
+\end{enumerate}
+
+%────────────────────────────────────────────────────────────────
+\section{Recap from Last Time}
+%────────────────────────────────────────────────────────────────
+
+Last time: $(\Omega, \F, \Prob)$ probability space. $\G \subseteq \F$ sub $\sigma$-field. $X : (\Omega, \F) \to (\R, \B_\R)$ measurable with $\E\abs{X} < \infty$.
+
+The conditional expectation $\E[X \mid \G]$ is the unique (up to measure zero sets) $\G$-measurable random variable such that
+\[
+    \forall\, A \in \G, \quad \E[X \ind_A] = \E\bigl[\E[X \mid \G]\, \ind_A\bigr].
+\]
+
+%────────────────────────────────────────────────────────────────
+\section{Uniqueness of Conditional Expectation}
+%────────────────────────────────────────────────────────────────
+
+\textbf{Uniqueness:} If possible, let $Y_1$ and $Y_2$ be versions of $\E[X \mid \G]$.
+
+Let $A = \{Y_1 > Y_2\} \in \G$.
+\[
+    \E[Y_1 \ind_A] = \E[X \ind_A] = \E[Y_2 \ind_A]
+    \quad \Rightarrow \quad
+    \E\bigl[(Y_1 - Y_2)\ind_A\bigr] = 0.
+\]
+\[
+    \Rightarrow \quad \Prob(A) = 0.
+\]
+Similarly, $\Prob(Y_2 > Y_1) = 0$.
+\[
+    \Rightarrow \quad \Prob(Y_1 \neq Y_2) = 0.
+\]
+
+To get existence of $\E[X \mid \G]$, we will use the \textbf{Radon--Nikodym theorem}.
+
+%────────────────────────────────────────────────────────────────
+\section{Absolute Continuity}
+%────────────────────────────────────────────────────────────────
+
+$(\Omega, \F)$ is a measurable space. $\mu, \nu$ are finite measures on $(\Omega, \F)$.
+
+\begin{definition}{Absolute Continuity}{abs-cont}
+    $\nu$ is \emph{absolutely continuous} with respect to $\mu$ (written $\nu \ll \mu$) if
+    \[
+        \mu(S) = 0 \quad \Rightarrow \quad \nu(S) = 0.
+    \]
+\end{definition}
+
+%────────────────────────────────────────────────────────────────
+\section{Radon--Nikodym Theorem}
+%────────────────────────────────────────────────────────────────
+
+\begin{theorem}{Radon--Nikodym Theorem}{radon-nikodym}
+    \begin{enumerate}[label=(\alph*)]
+        \item If $\nu \ll \mu$, there exists $f \geq 0$, $\int f \dmu < \infty$ such that
+        \[
+            \nu(S) = \int_S f \dmu \qquad \forall\, S \in \F.
+        \]
+        Denote $f = \dfrac{d\nu}{d\mu}$.
+
+        \item Without absolute continuity, there exist $f \geq 0$, $\int f \dmu < \infty$, and a finite measure $\oplus$ such that
+        \[
+            \nu(S) = \oplus(S) + \int_S f \dmu.
+        \]
+        Further, $\oplus$ and $\mu$ have disjoint support, i.e.,
+        \[
+            \exists\, S \in \F, \quad \mu(S) = 0, \quad \oplus(S^c) = 0.
+        \]
+        $\oplus$ is the ``singular part'' and the second term is the ``absolutely continuous part'' of $\nu$.
+
+        \item Assume $\nu(S) \leq \mu(S)$ for all $S \in \F$. Then there exists $f : \Omega \to [0,1]$ measurable such that
+        \[
+            \nu(S) = \int_S f \dmu.
+        \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{remark}{Intuition for the Radon--Nikodym derivative}{rn-intuition}
+    The RN derivative is reweighing of $\mu$.
+\end{remark}
+
+%────────────────────────────────────────────────────────────────
+\section{Existence of Conditional Expectation Assuming Radon--Nikodym Theorem}
+%────────────────────────────────────────────────────────────────
+
+$X : \Omega \to \R$ with $\E\abs{X} < \infty$. $\G \subseteq \F$ sub $\sigma$-field.
+
+\textbf{Define:} $\nu(S) = \int_S X \dmu$ (Assume $X \geq 0$. Otherwise $X = X_+ - X_-$ and work with $X_+$ and $X_-$ separately) for $S \in \G$.
+
+$\E\abs{X} < \infty$ implies $\nu$ is a finite measure.
+
+If $\mu(S) = 0 \Rightarrow \nu(S) = 0$.
+
+By RN theorem, there exists $Y = \dfrac{d\nu}{d\mu}$ which is $\G$-measurable.
+
+Further,
+\[
+    \nu(S) = \int_S Y \dmu = \int_S X \dmu \qquad \forall\, S \in \G.
+\]
+\[
+    \Rightarrow \quad Y = \E[X \mid \G].
+\]
+
+%────────────────────────────────────────────────────────────────
+\section{Proof of the Radon--Nikodym Theorem (Proof by Anton Schep, 2003)}
+%────────────────────────────────────────────────────────────────
+
+For two general finite measures $\mu, \nu$.
+
+\textbf{Obs:} (b) $\Rightarrow$ (a) $\Rightarrow$ (c). For this pair to get (a), (b) (HW), will use (c) on $\nu \leq \nu + \mu$.
+
+Will prove (c).
+
+\textbf{Main challenge:} Need to come up with the RN derivative out of nowhere.
+
+\textbf{Idea:} Look at
+\[
+    \cH = \Bigl\{ f : \Omega \to [0,1] \text{ measurable}, \quad \int_S f \dmu \leq \nu(S) \quad \forall\, S \in \F \Bigr\}.
+\]
+$\dfrac{d\nu}{d\mu}$ should be the maximal element in this class.
+
+\begin{proof}
+    \textbf{Step 0:} $\cH \neq \varnothing$, since $f = 0 \in \cH$.
+
+    \medskip
+    \textbf{Step 1:} If $f_1, f_2 \in \cH$, then $\max\{f_1, f_2\} \in \cH$.
+
+    Fix $S \in \F$.
+    \[
+        \int_S \max\{f_1, f_2\} \dmu
+        = \int_{S \cap \{f_1 \geq f_2\}} f_1 \dmu + \int_{S \cap \{f_1 < f_2\}} f_2 \dmu
+    \]
+    \[
+        \leq \nu\bigl(S \cap \{f_1 \geq f_2\}\bigr) + \nu\bigl(S \cap \{f_1 < f_2\}\bigr)
+        = \nu(S).
+    \]
+
+    \medskip
+    \textbf{Step 2:} Define
+    \[
+        M = \sup_{f \in \cH} \int_\Omega f \dmu \leq 1.
+    \]
+
+    For each $n \geq 1$, there exists $f_n \in \cH$ such that
+    \[
+        \int_\Omega f_n \dmu \geq M - \tfrac{1}{n}.
+    \]
+    Set $\bar{f}_n = \max\{f_1, \ldots, f_n\} \in \cH$.
+
+    $\bar{f}_n \uparrow$ pointwise and bounded by $1$.
+
+    \medskip
+    \[
+        \boxed{f_* = \lim_{n \to \infty} \bar{f}_n}
+    \]
+
+    \medskip
+    \textbf{Step 3:} $\displaystyle\int_\Omega f_* \dmu = M$.
+
+    By definition, $\displaystyle\int_\Omega f_* \dmu \leq M$ (since $f_* \in \cH$, by Fatou's lemma).
+
+    However,
+    \[
+        \int_\Omega f_* \dmu \geq \lim_{n \to \infty} \int_\Omega \bar{f}_n \dmu = M
+    \]
+    (pointwise convergence, Fatou's lemma).
+
+    \medskip
+    \textbf{Step 4:} $\displaystyle\forall\, S \in \F, \quad \int_S f_* \dmu \leq \lim \int_S \bar{f}_n \dmu \leq \nu(S)$ \quad (since $\bar{f}_n \in \cH$).
+
+    \medskip
+    \textbf{Step 5:} To show $\displaystyle\int_S f_* \dmu = \nu(S) \quad \forall\, S \in \F$.
+\end{proof}

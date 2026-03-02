@@ -1,0 +1,204 @@
+% lecture08.tex — Existence of Brownian Motion, BM on [0,∞)
+
+\section*{Agenda}
+\begin{enumerate}
+    \item Existence of Brownian motion.
+    \item Brownian motion on $[0,\infty)$.
+\end{enumerate}
+
+\noindent\textbf{Announcements.} Problem set~2 online. Midterm March~9.
+
+%% ========================================================================
+\section{Recap}
+%% ========================================================================
+
+Last time we defined standard Brownian motion (sBM) on $[0,1]$ and proved \emph{uniqueness} of the Wiener measure on $C([0,1])$.
+
+\textbf{Today:} Existence. Equivalently, can we construct a measurable map $B \colon (\Omega, \F) \to (C([0,1]), \B_{C([0,1])})$ satisfying the sBM properties?
+
+\begin{remark}{Gaussian Process Characterization}{gp-char}
+    Standard Brownian motion on $[0,1]$ is equivalently a Gaussian process with $\E[B_t] = 0$, $\Cov(B_t, B_s) = s \wedge t$, and continuous paths almost surely.
+\end{remark}
+
+%% ========================================================================
+\section{Existence of Brownian Motion (Paul L\'{e}vy's Construction)}
+%% ========================================================================
+
+\begin{theorem}{Existence of Brownian Motion}{bm-existence}
+    Standard Brownian motion on $[0,1]$ exists.
+\end{theorem}
+
+\begin{proof}
+    Start with an arbitrary probability space supporting iid standard normal random variables $Z_1, Z_2, \ldots$ (i.e., $Z_i \sim N(0,1)$ iid).
+
+    \textbf{Strategy:} Construct a sequence $\{B^{(1)}, B^{(2)}, \ldots\} \subset C([0,1])$ using $\{Z_n\}$, and show this sequence converges to a limit $B \in C([0,1])$ satisfying all sBM properties.
+
+    \medskip
+    \textbf{Step 1.} Define $B^{(1)} \in C([0,1])$ by:
+    \[
+        B^{(1)}_t =
+        \begin{cases}
+            0 & \text{if } t = 0,\\
+            Z_1 & \text{if } t = 1,
+        \end{cases}
+    \]
+    with linear interpolation between $0$ and $1$. That is, $B^{(1)}_t = t Z_1$.
+
+    \medskip
+    \textbf{Step 2.} Define $B_{1/2}$. From the sBM properties, given $B_0 = 0$ and $B_1 = Z_1$, we need
+    \[
+        B_{1/2} = \frac{1}{2} Z_1 + \widetilde{Z}, \qquad \widetilde{Z} \sim N\!\left(0, \frac{1}{4}\right) \text{ independent of } Z_1.
+    \]
+    Define $B^{(2)} \in C([0,1])$ by:
+    \[
+        B^{(2)}_t =
+        \begin{cases}
+            0 & \text{if } t = 0,\\
+            B_{1/2} & \text{if } t = 1/2,\\
+            Z_1 & \text{if } t = 1,
+        \end{cases}
+    \]
+    with linear interpolation between consecutive points.
+
+    \textbf{Check:} $(B^{(2)}_0, B^{(2)}_{1/2}, B^{(2)}_1) = (0, B_{1/2}, Z_1)$ has the correct joint distribution for sBM evaluated at $\{0, 1/2, 1\}$.
+
+    \medskip
+    \textbf{General construction (Step $k+1$).} Suppose we have already defined the values $B_0, B_{1/2^k}, B_{2/2^k}, \ldots, B_1$ at all dyadic rationals of order $k$. For each \emph{odd} integer $j$ with $1 \leq j \leq 2^{k+1} - 1$, define
+    \[
+        B_{j/2^{k+1}} = \frac{1}{2}\!\left(B_{(j-1)/2^{k+1}} + B_{(j+1)/2^{k+1}}\right) + Z_{j/2^{k+1}},
+    \]
+    where
+    \[
+        Z_{j/2^{k+1}} \sim N\!\left(0, \frac{1}{2^{k+2}}\right),
+    \]
+    all independent of each other and of everything previously defined. Then $B^{(k+1)}$ is the piecewise linear interpolation through all dyadic points of order $k+1$.
+
+    \medskip
+    \textbf{Convergence.} We claim that $\{B^{(k)}\}$ converges in $C([0,1])$.
+
+    \begin{quote}
+    \textbf{Claim:} $\displaystyle \E\!\left[\sum_{k=1}^{\infty} \norm{B^{(k+1)} - B^{(k)}}_\infty\right] < \infty$, which implies $\{B^{(k)}\}$ is almost surely Cauchy in $(C([0,1]), d_{\sup})$.
+    \end{quote}
+
+    \textbf{Proof of claim.} By construction, $B^{(k+1)}$ and $B^{(k)}$ agree at all dyadic rationals of order $k$, and between consecutive such points, $B^{(k+1)}$ deviates from $B^{(k)}$ by at most the maximum of the added Gaussian increments. Hence
+    \[
+        \norm{B^{(k+1)} - B^{(k)}}_\infty \leq \max_{j \text{ odd}} \abs{Z_{j/2^{k+1}}},
+    \]
+    where the maximum is over at most $2^k$ independent centered Gaussians, each with variance $1/2^{k+2}$.
+
+    Using the standard bound on the expected maximum of Gaussians:
+    \[
+        \E\!\left[\max_{j \text{ odd}} \abs{Z_{j/2^{k+1}}}\right] \leq \frac{C\sqrt{k}}{2^{k/2}}
+    \]
+    for a universal constant $C > 0$. Since $\sum_{k=1}^{\infty} \frac{C\sqrt{k}}{2^{k/2}} < \infty$, the claim follows.
+
+    \medskip
+    Since $(C([0,1]), d_{\sup})$ is a complete metric space and $\{B^{(k)}\}$ is almost surely Cauchy, the limit
+    \[
+        B = \lim_{k \to \infty} B^{(k)}
+    \]
+    exists in $C([0,1])$ almost surely.
+
+    \medskip
+    \textbf{Verification.} The limit $B$ satisfies all sBM properties:
+    \begin{itemize}
+        \item \emph{Continuous paths:} $B \in C([0,1])$ by completeness.
+        \item \emph{Gaussian increments:} At each stage $k$, $B^{(k)}$ has the correct finite-dimensional distributions on dyadic rationals of order $k$ (by induction). By continuity, $B$ has the correct finite-dimensional distributions at all times.
+        \item \emph{Independent increments:} Follows from the finite-dimensional distributions.
+    \end{itemize}
+    This completes the proof of existence. \qedhere
+\end{proof}
+
+%% ========================================================================
+\section{Brownian Motion on $[0,\infty)$}
+%% ========================================================================
+
+\begin{definition}{Standard Brownian Motion on $[0,\infty)$}{sbm-half-line}
+    A stochastic process $\{B_t : t \geq 0\}$ is a \emph{standard Brownian motion on $[0,\infty)$} if:
+    \begin{enumerate}[label=(\roman*)]
+        \item $B_0 = 0$ and $B_t - B_s \sim N(0, t - s)$ for all $0 \leq s \leq t < \infty$.
+        \item \emph{Independent increments:} For all $n \geq 1$ and all $0 \leq t_1 \leq t_2 \leq \cdots \leq t_n$,
+        \[
+            (B_{t_1},\; B_{t_2} - B_{t_1},\; \ldots,\; B_{t_n} - B_{t_{n-1}})
+        \]
+        are independent.
+        \item \emph{Continuous paths:} $t \mapsto B_t$ is continuous almost surely.
+    \end{enumerate}
+\end{definition}
+
+\subsection{Construction and Uniqueness}
+
+\textbf{Construction:} ``Glue'' together iid standard Brownian motions on $[0,1]$.
+
+Let $B^1, B^2, B^3, \ldots$ be iid sBMs on $[0,1]$. For $k \leq t \leq k+1$ (where $k \in \{0,1,2,\ldots\}$), define
+\[
+    B_t = B^{k+1}_{t-k} + B^{k}_{1} + B^{k-1}_{1} + \cdots + B^{1}_{1}
+    = B^{k+1}_{t-k} + \sum_{i=1}^{k} B^{i}_{1}.
+\]
+
+\textbf{Check:} $\{B_t : t \geq 0\}$ satisfies all three properties of sBM on $[0,\infty)$.
+
+\textbf{Uniqueness:} The same argument as in the $[0,1]$ case extends to $[0,\infty)$.
+
+\begin{remark}{$C([0,\infty))$ as a Metric Space}{c-half-line}
+    Let $C([0,\infty)) = \{f \colon [0,\infty) \to \R : f \text{ continuous}\}$. Define
+    \[
+        d(f,g) = \sum_{n=0}^{\infty} \frac{1}{2^n} \cdot \frac{\norm{f - g}_{[n,n+1]}}{1 + \norm{f - g}_{[n,n+1]}},
+    \]
+    where $\norm{f - g}_{[n,n+1]} = \sup_{t \in [n,n+1]} \abs{f(t) - g(t)}$. This metric induces uniform convergence on compact sets, and $(C([0,\infty)), d)$ is a complete, separable metric space. Moreover, $\{B_t : t \geq 0\}$ is a $C([0,\infty))$-valued random variable.
+\end{remark}
+
+%% ========================================================================
+\section{Scaling Properties of Brownian Motion}
+%% ========================================================================
+
+\begin{theorem}{Scaling Properties of Brownian Motion}{bm-scaling}
+    Let $\{B_t : t \geq 0\} \sim \mathrm{sBM}$. Then:
+    \begin{enumerate}[label=(\roman*)]
+        \item \emph{Diffusive scaling:} For any $a > 0$, the process $X_t = \frac{1}{a} B_{a^2 t}$ is also a standard Brownian motion.
+        \item \emph{Stationarity of increments:} For any $s \geq 0$, the process $\{B_{t+s} - B_s : t \geq 0\}$ is also a standard Brownian motion.
+        \item \emph{Time inversion:} Define
+        \[
+            X_t =
+            \begin{cases}
+                0 & \text{if } t = 0,\\
+                t\, B_{1/t} & \text{if } t > 0.
+            \end{cases}
+        \]
+        Then $\{X_t : t \geq 0\} \sim \mathrm{sBM}$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    We prove part (iii); parts (i) and (ii) follow from direct verification of the sBM properties.
+
+    \medskip
+    \textbf{Proof of (iii).}
+
+    \begin{enumerate}[label=(\alph*)]
+        \item $X_0 = 0$ by definition.
+
+        \item \emph{Finite-dimensional distributions:} We show that $(X_{t_1}, \ldots, X_{t_k})$ is multivariate Gaussian with the correct covariance structure.
+
+        Since $X_t = t B_{1/t}$ for $t > 0$, and $B$ is a Gaussian process, $(X_{t_1}, \ldots, X_{t_k})$ is multivariate Gaussian (as a linear function of the Gaussian vector $(B_{1/t_1}, \ldots, B_{1/t_k})$).
+
+        We compute the covariance: for $s, t > 0$,
+        \[
+            \E[X_t X_s] = st \cdot \E[B_{1/t} B_{1/s}]
+            = st \cdot \min\!\left\{\frac{1}{s}, \frac{1}{t}\right\}
+            = st \cdot \frac{1}{\max\{s,t\}}
+            = \min\{s, t\}.
+        \]
+        This is exactly the covariance structure of sBM, and $\E[X_t] = t \cdot \E[B_{1/t}] = 0$.
+
+        \item \emph{Continuity of paths:}
+
+        For $t > 0$: $X_t = t B_{1/t}$ is continuous by construction (since $t \mapsto 1/t$ is continuous on $(0,\infty)$ and $B$ has continuous paths).
+
+        At $t = 0$: We need to show $X_t \to 0$ as $t \downarrow 0$ almost surely. Note that $X_t = t B_{1/t}$, so we need $t B_{1/t} \to 0$.
+
+        Along rationals: $\{X_t : t \in (0,\infty) \cap \Q\} \stackrel{d}{=} \{B_t : t \in (0,\infty) \cap \Q\}$, so $X_t \to 0$ along rationals almost surely (since $B_t \to B_0 = 0$ as $t \downarrow 0$).
+
+        Combining with the fact that $t \mapsto X_t$ is continuous on $(0,\infty)$, we conclude $X_t \to 0$ as $t \downarrow 0$ almost surely. \qedhere
+    \end{enumerate}
+\end{proof}

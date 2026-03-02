@@ -1,0 +1,84 @@
+% lecture07.tex — SLLN with Reverse Martingales, Brownian Motion
+
+\section*{Agenda}
+\begin{enumerate}
+    \item SLLN with reverse martingales.
+    \item Brownian motion.
+\end{enumerate}
+
+\noindent\textbf{Announcements.} Survey on Ed. Midterm March~9.
+
+%% ========================================================================
+\section{Brownian Motion}
+%% ========================================================================
+
+\subsection{Historical Background}
+
+\begin{itemize}
+    \item \textbf{Brown (1828):} Observed erratic motion of pollen grains suspended in water.
+    \item \textbf{Bachelier (1900):} First mathematical model of Brownian motion, motivated by finance (modeling stock prices).
+    \item \textbf{Einstein (1905):} Independently developed a theory of Brownian motion from the perspective of physics.
+    \item \textbf{Wiener (1923):} Gave the first rigorous mathematical construction.
+\end{itemize}
+
+\subsection{Definition of Standard Brownian Motion}
+
+\begin{definition}{Standard Brownian Motion}{sbm}
+    A stochastic process $\{B_t : t \in [0,1]\}$ (where for each $t$, $B_t \colon (\Omega, \F, \Prob) \to (\R, \B_\R)$) is a \emph{standard Brownian motion} (sBM) if:
+    \begin{enumerate}[label=(\roman*)]
+        \item $B_0 = 0$, $B_t \sim N(0, t)$ for all $t \in [0,1]$, and $B_t - B_s \sim N(0, t - s)$ for all $0 \leq s \leq t \leq 1$.
+        \item \emph{Independent increments:} For all $0 \leq t_1 \leq t_2 \leq \cdots \leq t_n \leq 1$, the random variables
+        \[
+            B_{t_1},\; B_{t_2} - B_{t_1},\; \ldots,\; B_{t_n} - B_{t_{n-1}}
+        \]
+        are independent.
+        \item \emph{Continuous paths:} The map $t \mapsto B_t(\omega)$ is continuous for $\Prob$-almost every $\omega$.
+    \end{enumerate}
+\end{definition}
+
+\begin{remark}{}{c01-recall}
+    Recall that $(C([0,1]), d_{\sup})$ is a complete, separable metric space, where $d_{\sup}(f,g) = \sup_{t \in [0,1]} \abs{f(t) - g(t)}$.
+\end{remark}
+
+\subsection{Equivalent Definitions}
+
+\begin{definition}{Equivalent Definition 1: $C([0,1])$-Valued Random Variable}{sbm-equiv1}
+    A standard Brownian motion is a $C([0,1])$-valued random variable satisfying conditions (i) and (ii) of \cref{def:sbm}.
+\end{definition}
+
+\begin{definition}{Equivalent Definition 2: Law of Brownian Motion (Wiener Measure)}{sbm-equiv2}
+    The \emph{law of Brownian motion} (or \emph{Wiener measure}) is a probability measure $\mu$ on $(C([0,1]), \B_{C([0,1])})$ such that the coordinate process $X_t(\omega) = \omega(t)$ satisfies conditions (i) and (ii) of \cref{def:sbm}.
+\end{definition}
+
+\subsection{Existence and Uniqueness}
+
+\textbf{Q.} Does standard Brownian motion exist? Is it unique (in law)?
+
+%% ========================================================================
+\section{Uniqueness of Brownian Motion}
+%% ========================================================================
+
+\begin{theorem}{Uniqueness of Brownian Motion}{bm-uniqueness}
+    Let $\mu$ and $\nu$ be probability measures on $(C([0,1]), \B_{C([0,1])})$ both satisfying conditions (i) and (ii) of \cref{def:sbm}. Then
+    \[
+        \mu(A) = \nu(A) \quad \text{for all } A \in \B_{C([0,1])}.
+    \]
+\end{theorem}
+
+\begin{proof}
+    The strategy is to approximate with finite-dimensional distributions and use continuity.
+
+    Construct approximating sequences $\{B_1^{(k)} : k \geq 1\}$ and $\{B_2^{(k)} : k \geq 1\}$ (piecewise linear interpolations on dyadic grids) such that:
+    \begin{enumerate}[label=(\alph*)]
+        \item $\mathcal{L}(B_1^{(k)}) = \mathcal{L}(B_2^{(k)})$ for all $k \geq 1$ (since the finite-dimensional distributions are determined by (i) and (ii)).
+        \item $d_{\sup}(B_i^{(k)}, B_i) \to 0$ almost surely as $k \to \infty$, for $i = 1, 2$.
+    \end{enumerate}
+
+    Since $B_1^{(k)} \stackrel{d}{=} B_2^{(k)}$ for all $k$, and $B_i^{(k)} \to B_i$ almost surely in $C([0,1])$, it follows that $B_1 \stackrel{d}{=} B_2$.
+
+    Indeed, for any bounded continuous function $f \colon C([0,1]) \to \R$:
+    \[
+        \E[f(B_1)] = \lim_{k \to \infty} \E[f(B_1^{(k)})] = \lim_{k \to \infty} \E[f(B_2^{(k)})] = \E[f(B_2)].
+    \]
+    Hence $B_1 \stackrel{d}{=} B_2$, i.e., $\mu = \nu$. (Why does the first and last equality hold? By the dominated convergence theorem, since $f$ is bounded and $f(B_i^{(k)}) \to f(B_i)$ a.s.\ by continuity of $f$.)
+\end{proof}

@@ -1,0 +1,186 @@
+% lecture06.tex — Reverse Martingales, Hewitt–Savage 0-1 Law, U-Statistics
+
+\section*{Agenda}
+\begin{enumerate}
+    \item Doob maximal inequality.
+    \item Reverse martingales.
+    \item Hewitt--Savage 0/1 law.
+\end{enumerate}
+
+\section*{Announcements}
+\begin{enumerate}
+    \item HW1 due Sunday.
+    \item Survey goes out.
+\end{enumerate}
+
+%────────────────────────────────────────────────────────────────
+\section{Reverse Martingales}
+%────────────────────────────────────────────────────────────────
+
+\begin{definition}{Reverse Martingale}{reverse-martingale}
+    Let $\{(X_n, \F_n) : n \leq 0\}$ be an adapted sequence with $X_n \in L^1$ for all $n \leq 0$. The filtration satisfies
+    \[
+        \F_{-\infty} = \bigcap_{n \leq 0} \F_n \subseteq \cdots \subseteq \F_{-1} \subseteq \F_0.
+    \]
+    We say $\{(X_n, \F_n) : n \leq 0\}$ is a \emph{reverse martingale} (RMG) if
+    \[
+        \E[X_{n+1} \mid \F_n] = X_n \quad \forall\, n \leq -1.
+    \]
+\end{definition}
+
+\begin{theorem}{Characterization and Convergence of Reverse Martingales}{rmg-characterization}
+    Let $X_0 \in L^1$. Then $\{(X_n, \F_n) : n \leq 0\}$ is a reverse martingale if and only if
+    \[
+        X_n = \E[X_0 \mid \F_n] \quad \forall\, n \leq 0.
+    \]
+    Further,
+    \[
+        \E[X_0 \mid \F_n] \asto \E[X_0 \mid \F_{-\infty}].
+    \]
+\end{theorem}
+
+\begin{proof}
+    $(\Rightarrow)$ We prove by induction on $-n$.
+
+    \textbf{Base case} ($n = -1$): By definition,
+    \[
+        X_{-1} = \E[X_0 \mid \F_{-1}].
+    \]
+
+    \textbf{Inductive step:} Suppose $X_{n+1} = \E[X_0 \mid \F_{n+1}]$. Then
+    \[
+        X_n = \E[X_{n+1} \mid \F_n] = \E\bigl[\E[X_0 \mid \F_{n+1}] \mid \F_n\bigr] = \E[X_0 \mid \F_n],
+    \]
+    where the last equality follows by the tower property (since $\F_n \subseteq \F_{n+1}$).
+
+    \medskip
+    $(\Leftarrow)$ Suppose $X_n = \E[X_0 \mid \F_n]$ for all $n \leq 0$. Then for $n \leq -1$,
+    \[
+        \E[X_{n+1} \mid \F_n] = \E\bigl[\E[X_0 \mid \F_{n+1}] \mid \F_n\bigr] = \E[X_0 \mid \F_n] = X_n,
+    \]
+    again by the tower property.
+\end{proof}
+
+%────────────────────────────────────────────────────────────────
+\section{Doob's Upcrossing Inequality for Reverse Martingales}
+%────────────────────────────────────────────────────────────────
+
+For the reverse martingale $\{(X_n, \F_n), \ldots, (X_0, \F_0)\}$, Doob's upcrossing inequality gives
+\[
+    \E\bigl[U_n([a,b])\bigr] \leq \frac{1}{b - a}\,\E\bigl[(X_0 - a)_+\bigr].
+\]
+
+By the monotone convergence theorem (MCT),
+\[
+    \E\bigl[U_\infty([a,b])\bigr] \leq \frac{\E\bigl[(X_0 - a)_+\bigr]}{b - a}.
+\]
+
+Almost sure convergence follows by the same argument as in the Martingale Convergence Theorem.
+
+%────────────────────────────────────────────────────────────────
+\section{Boosting to \texorpdfstring{$L^1$}{L1}-Convergence}
+%────────────────────────────────────────────────────────────────
+
+The family $\{\E[X_0 \mid \F_n] : n \leq 0\}$ is uniformly integrable (UI). Therefore,
+\[
+    X_n \asto X_{-\infty} \quad \text{and} \quad X_n \Lpto{1} X_{-\infty}.
+\]
+
+%────────────────────────────────────────────────────────────────
+\section{Showing \texorpdfstring{$X_{-\infty} = \E[X_0 \mid \F_{-\infty}]$}{X = E[X0|F-infty]}}
+%────────────────────────────────────────────────────────────────
+
+We verify the two conditions:
+
+\textbf{Observation 1.} $X_{-\infty}$ is $\F_{-\infty}$-measurable.
+
+Since $X_n$ is $\F_n$-measurable for each $n \leq 0$, and $X_n \asto X_{-\infty}$, the limit $X_{-\infty}$ is measurable with respect to $\bigcap_{n \leq 0} \F_n = \F_{-\infty}$.
+
+\textbf{Observation 2.} We use $L^1$-convergence and the $\pi$-$\lambda$ theorem.
+
+For any $A \in \F_n$ (for any fixed $n \leq 0$),
+\[
+    \E[X_0 \ind_A] = \E\bigl[\E[X_0 \mid \F_n]\,\ind_A\bigr] = \E[X_n \ind_A].
+\]
+By $L^1$-convergence, $\E[X_n \ind_A] \to \E[X_{-\infty} \ind_A]$. Hence
+\[
+    \E[X_0 \ind_A] = \E[X_{-\infty} \ind_A] \quad \forall\, A \in \bigcup_{n \leq 0} \F_n.
+\]
+By the $\pi$-$\lambda$ theorem, this extends to all $A \in \F_{-\infty}$, so $X_{-\infty} = \E[X_0 \mid \F_{-\infty}]$.
+
+%────────────────────────────────────────────────────────────────
+\section{Application: Convergence of \texorpdfstring{$U$}{U}-Statistics of i.i.d.\ Random Variables}
+%────────────────────────────────────────────────────────────────
+
+Let $\{X_n : n \geq 1\}$ be an i.i.d.\ sequence and let $\varphi \colon \R^\ell \to \R$ be bounded and measurable.
+
+\begin{definition}{\texorpdfstring{$U$}{U}-Statistic}{u-statistic}
+    The \emph{$U$-statistic} of order $\ell$ based on a sample of size $m$ is
+    \[
+        \hat{S}_m(\varphi) = \frac{1}{(m)_\ell} \sum_{\substack{i_1, \ldots, i_\ell \in \{1, \ldots, m\} \\ \text{all distinct}}} \varphi(X_{i_1}, \ldots, X_{i_\ell}),
+    \]
+    where $(m)_\ell = m(m-1)\cdots(m - \ell + 1)$ is the falling factorial.
+\end{definition}
+
+\begin{theorem}{Convergence of \texorpdfstring{$U$}{U}-Statistics}{u-stat-convergence}
+    If $\{X_n : n \geq 1\}$ are i.i.d., then
+    \[
+        \hat{S}_m(\varphi) \asto \E[\varphi(X_1, \ldots, X_\ell)] \quad \text{and} \quad \hat{S}_m(\varphi) \Lpto{1} \E[\varphi(X_1, \ldots, X_\ell)].
+    \]
+\end{theorem}
+
+\begin{proof}
+    \textbf{Step 1: Construct a reverse filtration.}
+
+    For each $m \geq 1$, define
+    \[
+        \F_{-m} = \sigma\!\left(\frac{1}{(m)_\ell} \sum_{\substack{i_1, \ldots, i_\ell \in \{1, \ldots, m\} \\ \text{all distinct}}} \tilde{\varphi}(X_{i_1}, \ldots, X_{i_\ell}) : \tilde{\varphi} \colon \R^\ell \to \R \text{ bounded measurable}\right).
+    \]
+
+    \textit{Intuition:} $\F_{-m}$ captures the information in $\{X_1, \ldots, X_m\}$ up to a random permutation.
+
+    \medskip
+    If $n \geq m$, then $\F_{-n} \subseteq \F_{-m}$, so
+    \[
+        \F_{-1} \supseteq \F_{-2} \supseteq \cdots.
+    \]
+    Let $\mathcal{E} = \bigcap_{n \geq 1} \F_{-n}$ denote the \emph{exchangeable $\sigma$-algebra}.
+
+    \medskip
+    \textbf{Step 2: Show $\hat{S}_m(\varphi) = \E[\varphi(X_1, \ldots, X_\ell) \mid \F_{-m}]$.}
+
+    By symmetry of the i.i.d.\ sequence and the definition of $\F_{-m}$,
+    \[
+        \hat{S}_m(\varphi) = \E\bigl[\hat{S}_m(\varphi) \mid \F_{-m}\bigr] = \E\bigl[\varphi(X_1, \ldots, X_\ell) \mid \F_{-m}\bigr].
+    \]
+
+    \medskip
+    \textbf{Step 3: Apply the reverse martingale convergence theorem.}
+
+    By the reverse martingale convergence theorem,
+    \[
+        \hat{S}_m(\varphi) \asto \E[\varphi(X_1, \ldots, X_\ell) \mid \mathcal{E}] \quad \text{and} \quad \hat{S}_m(\varphi) \Lpto{1} \E[\varphi(X_1, \ldots, X_\ell) \mid \mathcal{E}].
+    \]
+
+    \medskip
+    \textbf{Step 4: Show $\E[\varphi(X_1, \ldots, X_\ell) \mid \mathcal{E}] = \E[\varphi(X_1, \ldots, X_\ell)]$.}
+
+    For each $n \geq 1$, define
+    \[
+        \hat{S}_{m,n}(\varphi) = \frac{1}{(m)_\ell} \sum_{\substack{i_1, \ldots, i_\ell \in \{n+1, \ldots, m\} \\ \text{all distinct}}} \varphi(X_{i_1}, \ldots, X_{i_\ell}),
+    \]
+    where all indices are restricted to be $> n$. Then
+    \[
+        \abs{\hat{S}_m(\varphi) - \hat{S}_{m,n}(\varphi)} \leq \frac{C(n)}{m}\,\norm{\varphi}_\infty \to 0 \quad \text{as } m \to \infty,
+    \]
+    where $C(n)$ depends only on $n$ and $\ell$.
+
+    Letting $m \to \infty$, we obtain $\hat{S}_\infty(\varphi) \perp\!\!\!\perp \{X_1, \ldots, X_n\}$ for all $n \geq 1$.
+
+    \medskip
+    Therefore,
+    \[
+        \Var\bigl(\E[\varphi(X_1, \ldots, X_\ell) \mid \mathcal{E}]\bigr) = 0,
+    \]
+    which implies $\E[\varphi(X_1, \ldots, X_\ell) \mid \mathcal{E}] = \E[\varphi(X_1, \ldots, X_\ell)]$ a.s.
+\end{proof}
