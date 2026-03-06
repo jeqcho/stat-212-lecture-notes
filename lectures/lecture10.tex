@@ -1,0 +1,204 @@
+% lecture10.tex — Markov Property, Stopping Times, Strong Markov Property
+
+\section*{Agenda}
+\begin{enumerate}
+    \item Markov property of BM.
+    \item Stopping times.
+    \item Strong Markov property.
+\end{enumerate}
+
+\noindent\textbf{Announcements.} Midterm March~9. Practice problems (solutions to be posted).
+
+%% ========================================================================
+\section{Right-Continuous Filtrations}
+%% ========================================================================
+
+\begin{definition}{Right-Continuous Filtration}{right-cts-filtration}
+    A filtration $\{\F_t^+ : t \geq 0\}$ is \emph{right-continuous} if
+    \[
+        \F_t^+ = \bigcap_{s > t} \F_s^+.
+    \]
+\end{definition}
+
+\begin{example}{Canonical Right-Continuous Filtration}{canonical-right-cts}
+    Let $\F_t^0 = \sigma(\{B_s : s \leq t\})$. Define
+    \[
+        \F_t^+ = \bigcap_{s > t} \F_s^0.
+    \]
+    \textbf{Check:} $\{\F_t^+ : t \geq 0\}$ is right-continuous.
+\end{example}
+
+\textbf{Why care about right-continuous filtrations?}
+
+\noindent\textbf{A:} Plays well with the notion of stopping times, and does not change the picture too much (BM is Markov with respect to $\F_t^+$, and Blumenthal's 0/1 law holds).
+
+%% ========================================================================
+\section{Markov Property with $\F_t^+$}
+%% ========================================================================
+
+First let us check that the Markov property continues to hold with $\{\F_t^+ : t \geq 0\}$.
+
+\begin{lemma}{Shifted BM Independent of $\F_s^+$}{shifted-bm-right-cts}
+    Let $\{B_t : t \geq 0\} \sim \mathrm{sBM}$. Define $W_t = B_{t+s} - B_s$ for $t \geq 0$. Then $\{W_t : t \geq 0\}$ is a standard Brownian motion and $\{W_t\} \perp\!\!\!\perp \F_s^+$.
+\end{lemma}
+
+\begin{proof}
+    For $n \geq 1$, define $W_t^n = B_{t+s+\frac{1}{n}} - B_{s+\frac{1}{n}}$. Then $W_t^n \perp\!\!\!\perp \F_{s+\frac{1}{n}}^0$.
+
+    Since $\F_s^+ \subseteq \F_{s+\frac{1}{n}}^0$, we have $\{W_t^n : t \geq 0\} \perp\!\!\!\perp \F_s^+$ for all $n \geq 1$.
+
+    By continuity, as $n \to \infty$, $W_t^n \to W_t$. Therefore $\{W_t : t \geq 0\} \perp\!\!\!\perp \F_s^+$.
+\end{proof}
+
+%% ========================================================================
+\section{Stopping Times}
+%% ========================================================================
+
+Next, let us look at the relation with stopping times.
+
+\begin{definition}{Stopping Time}{stopping-time}
+    A non-negative random variable $T$, defined on the same probability space as $B$, is called a \emph{stopping time} for $\{(B_t, \F_t^+) : t \geq 0\}$ if
+    \[
+        \{T < t\} \in \F_t^+ \quad \forall\, t \geq 0.
+    \]
+\end{definition}
+
+\begin{claim}{Equivalent Characterization of Stopping Times}{stopping-time-equiv}
+    The definition $\{T < t\} \in \F_t^+$ for all $t \geq 0$ is equivalent to $\{T \leq t\} \in \F_t^+$ for all $t \geq 0$.
+\end{claim}
+
+\begin{proof}
+    $(\Leftarrow)$\; Suppose $\{T \leq t\} \in \F_t^+$ for all $t \geq 0$. Then
+    \[
+        \{T < t\} = \bigcup_{n \geq 1} \left\{T \leq t - \tfrac{1}{n}\right\}.
+    \]
+    Since $\F_{t-\frac{1}{n}}^+ \subseteq \F_t^+$, each $\{T \leq t - \frac{1}{n}\} \in \F_t^+$, so $\{T < t\} \in \F_t^+$.
+
+    \medskip
+    $(\Rightarrow)$\; Suppose $\{T < t\} \in \F_t^+$ for all $t \geq 0$. Then
+    \[
+        \{T \leq t\} = \bigcap_{n \geq 1} \left\{T < t + \tfrac{1}{n}\right\}.
+    \]
+    Since $\F_{t+\frac{1}{n}}^+ \subseteq \F_{t+\varepsilon}$ for all $\varepsilon > 0$, we get $\{T \leq t\} \in \bigcap_{\varepsilon > 0} \F_{t+\varepsilon}^+ = \F_t^+$ (using right continuity).
+\end{proof}
+
+%% ========================================================================
+\section{Blumenthal's 0/1 Law}
+%% ========================================================================
+
+\textbf{Q:} For each $t \geq 0$, $\F_t^0 \subseteq \F_t^+$. Does $\F_t^+$ really contain more ``information''?
+
+\noindent\textbf{A:} Not really!
+
+\begin{theorem}{Blumenthal's 0/1 Law}{blumenthal}
+    Let $\{B_t : t \geq 0\} \sim \mathrm{sBM}$ and let $A \in \F_0^+$. Then $\Prob(A) \in \{0, 1\}$.
+\end{theorem}
+
+\begin{proof}
+    Since $\{B_t : t \geq 0\} \perp\!\!\!\perp \F_0^+$ (by the Markov property with $s = 0$), we have:
+
+    $A \in \F_0^+$ implies $A = \varphi(\{B_t : t \geq 0\})$ for some measurable $\varphi$. Therefore $A \perp\!\!\!\perp A$, which gives
+    \[
+        \Prob(A) = (\Prob(A))^2 \quad \Longrightarrow \quad \Prob(A) \in \{0, 1\}. \qedhere
+    \]
+\end{proof}
+
+\textbf{Q:} What does Blumenthal's 0/1 law mean for sBM?
+
+\begin{lemma}{Instantaneous Behavior of BM}{instantaneous-bm}
+    Let $\{B_t : t \geq 0\} \sim \mathrm{sBM}$. Define
+    \[
+        T = \inf\{t > 0 : B_t > 0\}, \qquad \sigma = \inf\{t > 0 : B_t = 0\}.
+    \]
+    Then $\Prob(T = 0) = \Prob(\sigma = 0) = 1$.
+\end{lemma}
+
+\begin{proof}
+    \textbf{$\Prob(T = 0) = 1$:}\; We have
+    \[
+        \{T = 0\} = \bigcap_{n \geq 1} \left\{\exists\, \varepsilon \in \left(0, \tfrac{1}{n}\right) \text{ s.t.\ } B_\varepsilon > 0\right\} \in \F_0^+.
+    \]
+    By Blumenthal's 0/1 law, $\Prob(T = 0) \in \{0, 1\}$.
+
+    For any $t > 0$, $\Prob(T \leq t) \geq \Prob(B_t > 0) = \frac{1}{2}$. Therefore $\Prob(T = 0) = 1$.
+
+    \medskip
+    \textbf{$\Prob(T' = 0) = 1$:}\; By the same argument applied to $T' = \inf\{t > 0 : B_t < 0\}$, we get $\Prob(T' = 0) = 1$.
+
+    \medskip
+    \textbf{$\Prob(\sigma = 0) = 1$:}\; Since $\Prob(T = 0) = \Prob(T' = 0) = 1$, BM is immediately positive and immediately negative after time $0$. By the intermediate value theorem (and continuity of paths), BM must hit $0$ in every interval $(0, \varepsilon)$. Hence $\Prob(\sigma = 0) = 1$.
+\end{proof}
+
+%% ========================================================================
+\section{Strong Markov Property}
+%% ========================================================================
+
+So far: BM refreshes after a fixed time. What about random times?
+
+\noindent\textbf{A:} Not true in general. True for stopping times.
+
+\begin{definition}{Stopped $\sigma$-Algebra}{stopped-sigma-alg}
+    Let $T$ be a stopping time with respect to $\{\F_t^+ : t \geq 0\}$. The \emph{stopped $\sigma$-algebra} is
+    \[
+        \F_T^+ = \{A \in \sigma(\{B_t : t \geq 0\}) : A \cap \{T < t\} \in \F_t^+ \;\forall\, t \geq 0\}.
+    \]
+\end{definition}
+
+\begin{theorem}{Strong Markov Property}{strong-markov}
+    Let $\{B_t : t \geq 0\} \sim \mathrm{sBM}$ and $T$ be a stopping time with respect to $\{\F_t^+ : t \geq 0\}$ with $\Prob(T < \infty) = 1$. Set $W_t = B_{T+t} - B_T$. Then $\{W_t : t \geq 0\}$ is a standard Brownian motion independent of $\F_T^+$.
+\end{theorem}
+
+\begin{remark}{Monotonicity of Stopped $\sigma$-Algebras}{stopped-monotone}
+    If $T, S$ are stopping times with $T \leq S$, then $\F_T^+ \subseteq \F_S^+$.
+\end{remark}
+
+\begin{proof}
+    \textbf{Step 1: Countable stopping times.}\;
+    Assume $T$ takes countably many values $0 \leq t_1 \leq t_2 \leq \cdots$. Define $W_t^i = B_{t+t_i} - B_{t_i}$.
+
+    Fix $A \in \F_T^+$ and $E \in \B_C([0,\infty))$. Then
+    \begin{align*}
+        \Prob[\{W_t : t \geq 0\} \in E,\; A]
+        &= \sum_{i=1}^{\infty} \Prob[\{W_t^i : t \geq 0\} \in E,\; A \cap \{T = t_i\}] \\
+        &= \sum_{i=1}^{\infty} \Prob[\{W_t^i : t \geq 0\} \in E] \cdot \Prob[A \cap \{T = t_i\}]
+    \end{align*}
+    where the second equality uses $\{W_t^i : t \geq 0\} \perp\!\!\!\perp \F_{t_i}^+$ and $A \cap \{T = t_i\} \in \F_{t_i}^+$.
+
+    Since $\{W_t^i : t \geq 0\}$ is sBM for each $i$, this equals
+    \[
+        = \Prob(A) \cdot \Prob(\{B_t : t \geq 0\} \in E).
+    \]
+
+    \medskip
+    \textbf{Step 2: General stopping times.}\;
+    For a general stopping time $T$, define the dyadic approximation
+    \[
+        T_n = \frac{m+1}{2^n} \quad \text{if } \frac{m}{2^n} \leq T < \frac{m+1}{2^n}.
+    \]
+    \textbf{Check:} $\{T_n : n \geq 1\}$ is a stopping time with respect to $\F_t^+$.
+    Indeed, $\{T_n < t\} = \bigcup_{m=0}^{\lfloor 2^n t \rfloor} \{T_n = \frac{m}{2^n}\} \in \F_t^+$.
+
+    Define $W_t^{(n)} = B_{T_n + t} - B_{T_n}$. By Step~1, $\{W_t^{(n)} : t \geq 0\} \perp\!\!\!\perp \F_{T_n}^+$ for all $n \geq 1$.
+
+    Since $T_n \geq T$, we have $\F_T^+ \subseteq \F_{T_n}^+$, so $\{W_t^{(n)} : t \geq 0\} \perp\!\!\!\perp \F_T^+$ for all $n \geq 1$.
+
+    As $n \to \infty$, $T_n \downarrow T$, so $W_t^{(n)} \to W_t$ almost surely (by continuity of paths). Therefore $\{W_t : t \geq 0\} \perp\!\!\!\perp \F_T^+$.
+\end{proof}
+
+%% ========================================================================
+\section{Application: Running Maximum is Not a Stopping Time}
+%% ========================================================================
+
+\begin{lemma}{Running Maximum Time is Not a Stopping Time}{running-max-not-stopping}
+    Let $T = \inf\{t : B_t = \max_{s \in [0,1]} B_s\}$. Then $T$ is \emph{not} a stopping time.
+\end{lemma}
+
+\begin{proof}
+    First, observe $\Prob(T < 1) = 1$.
+
+    Define $W_t = B_{1-t} - B_1$ for $0 \leq t \leq 1$. Then $\{W_t : t \in [0,1]\} \sim \mathrm{sBM}$ on $[0,1]$.
+
+    If $\{T = 1\}$, then $W_t < 0$ in a neighborhood of zero (since $B_t$ achieves its maximum at time $1$). Formally, $\to \leftarrow$.
+
+    Now consider $\{B_{T+t} - B_T : t \geq 0\}$. By the strong Markov property (if $T$ were a stopping time), this would be a sBM. But $B_{T+t} - B_T \leq 0$ for small $t > 0$ (since $B_T$ is the maximum of $B$ on $[0,1]$), which contradicts the fact that a sBM is immediately positive (by \cref{lem:instantaneous-bm}). This is a contradiction!
+\end{proof}

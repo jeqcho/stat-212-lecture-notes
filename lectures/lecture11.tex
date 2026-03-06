@@ -1,0 +1,119 @@
+% lecture11.tex — Reflection Principle, Running Maximum, Continuous-Time Martingales
+
+%% ========================================================================
+\section{Reflection Principle for Brownian Motion}
+%% ========================================================================
+
+Let $a > 0$ and define $T = \inf\{t \geq 0 : B_t > a\}$.
+
+\begin{remark}{$T$ is a Stopping Time}{hitting-time-stopping}
+    \textbf{Observation 1:} $T$ is a stopping time with respect to $\F_t^+$.
+
+    Indeed,
+    \[
+        \{T \leq t\} = \bigcap_{s > t} \{T < s\} = \bigcap_{s > t} \bigcup_{\substack{n \in (0,s) \cap \Q}} \{B_n > a\} \in \F_t^+.
+    \]
+\end{remark}
+
+\begin{remark}{$T$ is Finite Almost Surely}{hitting-time-finite}
+    \textbf{Observation 2:} $\Prob(T < \infty) = 1$.
+
+    This follows from $\limsup_{n \to \infty} \frac{B_n}{\sqrt{n}} = +\infty$ with probability $1$.
+\end{remark}
+
+\begin{definition}{Reflected Brownian Motion}{reflected-bm}
+    Define the \emph{reflected} process
+    \[
+        \tilde{B}_t =
+        \begin{cases}
+            B_t & \text{if } t \leq T, \\
+            2B_T - B_t & \text{if } t > T.
+        \end{cases}
+    \]
+\end{definition}
+
+\begin{lemma}{Reflected Process is sBM}{reflected-is-sbm}
+    $\{\tilde{B}_t : t \geq 0\}$ is a standard Brownian motion.
+\end{lemma}
+
+\begin{proof}
+    Define $W_t = B_{T+t} - B_T$ and $U_t = B_{t \wedge T}$.
+
+    Consider the map $\varphi \colon C([0,\infty)) \times [0,\infty) \times C([0,\infty)) \to \R$ defined by
+    \[
+        \varphi(U, T, W) =
+        \begin{cases}
+            U_t & \text{if } t \leq T, \\
+            a + W_{t-T} & \text{if } t > T.
+        \end{cases}
+    \]
+    Then $B_t = \varphi(U, T, W)$ and $\tilde{B}_t = \varphi(U, T, -W)$.
+
+    \begin{claim}{$(U, T)$ is $\F_T^+$-Measurable}{ut-measurable}
+        The pair $(U, T)$ is $\F_T^+$-measurable. (Check: $U_t = B_{t \wedge T}$ is $\F_T^+$-measurable.)
+    \end{claim}
+
+    By the strong Markov property, $\{W_t : t \geq 0\} \perp\!\!\!\perp \F_T^+$. Since $-W$ has the same distribution as $W$ (by symmetry of sBM), we get
+    \[
+        \varphi(U, T, W) \stackrel{d}{=} \varphi(U, T, -W).
+    \]
+    Therefore $\{\tilde{B}_t : t \geq 0\} \sim \mathrm{sBM}$.
+\end{proof}
+
+%% ========================================================================
+\section{Distribution of the Running Maximum}
+%% ========================================================================
+
+\begin{theorem}{Distribution of the Running Maximum}{running-max-dist}
+    Let $M_t = \max_{0 \leq s \leq t} B_s$. Fix $a > 0$ and let $T = \inf\{t \geq 0 : B_t > a\}$. Then
+    \[
+        \Prob[M_t \geq a] = 2\,\Prob[B_t \geq a].
+    \]
+    Consequently, $M_t \stackrel{d}{=} |Z|$ where $Z \sim N(0, t)$.
+\end{theorem}
+
+\begin{proof}
+    Decompose the event:
+    \begin{align*}
+        \Prob[M_t \geq a]
+        &= \Prob[M_t \geq a,\; B_t \geq a] + \Prob[M_t \geq a,\; B_t < a] \\
+        &= \Prob[B_t \geq a] + \Prob[M_t \geq a,\; \tilde{B}_t > a],
+    \end{align*}
+    where the second term uses the reflected Brownian motion $\tilde{B}$: on the event $\{M_t \geq a,\; B_t < a\}$, we have $T \leq t$ and $\tilde{B}_t = 2B_T - B_t = 2a - B_t > a$.
+
+    Since $\{\tilde{B}_t : t \geq 0\}$ is also a sBM,
+    \[
+        \Prob[M_t \geq a,\; \tilde{B}_t > a] = \Prob[\tilde{B}_t > a] = \Prob[B_t > a] = \Prob[B_t \geq a].
+    \]
+    Therefore
+    \[
+        \Prob[M_t \geq a] = \Prob[B_t \geq a] + \Prob[B_t \geq a] = 2\,\Prob[B_t \geq a].
+    \]
+
+    Since $B_t \sim N(0,t)$, we have $\Prob[M_t \geq a] = 2\,\Prob[B_t \geq a] = \Prob[|B_t| \geq a]$, so $M_t \stackrel{d}{=} |Z|$ where $Z \sim N(0,t)$.
+\end{proof}
+
+%% ========================================================================
+\section{Continuous-Time Martingales}
+%% ========================================================================
+
+Let $(\Omega, \F, \Prob)$ be a probability space with filtration $\{\F_t : t \geq 0\}$, and let $\{X_t : t \geq 0\}$ be a stochastic process adapted to $\{\F_t : t \geq 0\}$.
+
+\begin{definition}{Continuous-Time Martingale}{cts-martingale}
+    $\{(X_t, \F_t) : t \geq 0\}$ is a \emph{martingale} if:
+    \begin{enumerate}[label=(\roman*)]
+        \item $\E|X_t| < \infty$ for all $t \geq 0$.
+        \item $\E[X_t \mid \F_s] = X_s$ for all $s \leq t$.
+    \end{enumerate}
+\end{definition}
+
+\begin{example}{Brownian Motion is a Martingale}{bm-martingale}
+    Let $\{B_t : t \geq 0\} \sim \mathrm{sBM}$ with the canonical right-continuous filtration $\{\F_t^+ : t \geq 0\}$. Then $\{(B_t, \F_t^+) : t \geq 0\}$ is a martingale.
+\end{example}
+
+\begin{proof}
+    By the Markov property, $B_t - B_s \perp\!\!\!\perp \F_s^+$. Therefore
+    \[
+        \E[B_t \mid \F_s^+] = \E[B_t - B_s \mid \F_s^+] + B_s = \E[B_t - B_s] + B_s = 0 + B_s = B_s. \qedhere
+    \]
+\end{proof}
