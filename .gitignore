@@ -9,3 +9,7 @@
 *.fls
 *.synctex.gz
 !reference/*.pdf
+
+# Cheat sheet
+cheatsheet.tex
+cheatsheet.pdf

@@ -1,0 +1,166 @@
+% midterm_practice_solutions.tex — STAT 212 Midterm Practice Solutions
+
+%% ========================================================================
+\section*{Problem 1}
+%% ========================================================================
+
+$X_1, X_2, \ldots \overset{\text{iid}}{\sim} \mathrm{Ber}(p)$.
+
+By the SLLN, $\frac{1}{n} \sum_{i=1}^{n} X_i \asto p$.
+
+Consider the subset
+\[
+    C_p = \left\{ x \in \R^\N : \frac{1}{n} \sum_{i=1}^{n} x_i \to p \right\}.
+\]
+By the SLLN, $\Prob_p(C_p) = 1$.
+
+The proof is done upon observing that $C_p \cap C_q = \emptyset$ for $p \neq q$.
+
+%% ========================================================================
+\section*{Problem 2}
+%% ========================================================================
+
+$\{B_t^1 : t \geq 0\}$, $\{B_t^2 : t \geq 0\}$ are independent sBM. Let $X_t = O B_t$, where
+\[
+    O = \begin{bmatrix} O_{11} & O_{12} \\ O_{21} & O_{22} \end{bmatrix}, \qquad O O^\mathsf{T} = O^\mathsf{T} O = I.
+\]
+Write $X_t = \begin{bmatrix} X_t^1 \\ X_t^2 \end{bmatrix}$.
+
+\textbf{Note:}
+\begin{enumerate}[label=(\roman*)]
+    \item For any $k \geq 1$ and $t_1 \leq \cdots \leq t_k$,
+    \[
+        (X_{t_1}^1, \ldots, X_{t_k}^1) \quad \text{and} \quad (X_{t_1}^2, \ldots, X_{t_k}^2)
+    \]
+    are linear combinations of multivariate Gaussians. Hence multivariate Gaussian.
+
+    \item $\E[X_t] = 0$.
+
+    \item
+    \begin{align*}
+        \Cov(X_t, X_s) &= \Cov(O B_t, O B_s) \\
+        &= O \, \Cov(B_t, B_s) \, O^\mathsf{T} \\
+        &= O \begin{bmatrix} \min\{s,t\} & 0 \\ 0 & \min\{s,t\} \end{bmatrix} O^\mathsf{T} \\
+        &= \min\{s,t\} \, I.
+    \end{align*}
+\end{enumerate}
+
+Hence $(X_t^1, X_t^2)$ are independent Gaussian processes with the appropriate mean and covariances.
+
+Finally, $t \mapsto X_t$ is also continuous a.s.\ (composition of a linear map with a continuous map).
+
+This establishes that $(X_t^1, X_t^2)$ are independent standard Brownian motions.
+
+%% ========================================================================
+\section*{Problem 3}
+%% ========================================================================
+
+$T_1, T_2$ are stopping times with respect to the right continuous filtration $\{\F_t^+ : t \geq 0\}$.
+
+\textbf{Discrete case.} First, assume $T_1$ and $T_2$ assume discrete values $0 \leq t_1 \leq t_2 \leq \cdots$. (We can choose common values by taking the union of the two supports.)
+
+$T = T_1 + T_2$ assumes values $\{u_1, u_2, \ldots\}$. For any $t > 0$,
+\[
+    \{T < t\} = \bigcup_{u_i < t} \{T = u_i\} = \bigcup_{u_i < t} \bigcup_{\substack{t_k + t_\ell = u_i}} \{T_1 = t_k, T_2 = t_\ell\} \in \F_t^+.
+\]
+This completes the proof for the discrete case.
+
+\textbf{General case.} Now, approximate:
+\[
+    T_{1,n} = \frac{m+1}{2^n} \quad \text{if } \frac{m}{2^n} \leq T_1 < \frac{m+1}{2^n},
+\]
+\[
+    T_{2,n} = \frac{m+1}{2^n} \quad \text{if } \frac{m}{2^n} \leq T_2 < \frac{m+1}{2^n}.
+\]
+$T_{1,n}$, $T_{2,n}$ are stopping times with respect to $\{\F_t^+ : t \geq 0\}$.
+
+By the discrete result, $T_{1,n} + T_{2,n}$ is a stopping time with respect to $\{\F_t^+ : t \geq 0\}$.
+
+Also, $T_{1,n} \downarrow T_1$, $T_{2,n} \downarrow T_2$ as $n \to \infty$.
+\[
+    \{T_1 + T_2 \leq t\} = \bigcap_{s > t} \{T_1 + T_2 < s\} = \bigcap_{s > t} \bigcup_{n \geq 1} \{T_{1,n} + T_{2,n} < s\} \in \F_s^+
+\]
+and hence $\in \F_t^+$ by the right continuity of the filtration.
+
+This completes the proof.
+
+%% ========================================================================
+\section*{Problem 4}
+%% ========================================================================
+
+$\{(Y_n, \F_n) : n \geq 0\}$ is a UI martingale. $Y_n \asto Y_\infty$. $\Prob(T < \infty) = 1$.
+
+$T$ is a stopping time with respect to $\{\F_n : n \geq 0\}$.
+
+$\F_T = \{A : A \cap \{T = n\} \in \F_n\}$ is the stopped $\sigma$-algebra.
+
+\textbf{(1) $Y_T$ is $\F_T$-measurable.}
+
+\begin{proof}
+    $Y_T = \sum_{n=0}^{\infty} Y_n \ind(T = n)$.
+
+    For any Borel set $S \subseteq \R$,
+    \[
+        \{Y_T \in S\} = \bigcup_{n \geq 0} \{Y_T \in S, T = n\} = \bigcup_{n \geq 0} \{Y_n \in S, T = n\}.
+    \]
+    Therefore $\{Y_T \in S, T = m\} = \{Y_m \in S, T = m\} \in \F_m$.
+
+    Hence $\{Y_T \in S\} \in \F_T$ for all Borel sets $S$.
+\end{proof}
+
+\textbf{(2) $Y_T = \E[Y_\infty \mid \F_T]$.}
+
+\begin{proof}
+    Fix $A \in \F_T$. We need to show $\E[Y_T \ind_A] = \E[Y_\infty \ind_A]$.
+    \[
+        \E[Y_T \ind_A] = \sum_{n=0}^{\infty} \E[Y_n \ind_{A \cap \{T = n\}}].
+    \]
+    Note $Y_n = \E[Y_\infty \mid \F_n]$ (since the martingale is UI) and $A \cap \{T = n\} \in \F_n$.
+
+    Therefore
+    \[
+        \E[Y_T \ind_A] = \sum_{n=0}^{\infty} \E[Y_\infty \ind_{A \cap \{T = n\}}] = \E[Y_\infty \ind_A]. \qedhere
+    \]
+\end{proof}
+
+%% ========================================================================
+\section*{Problem 5}
+%% ========================================================================
+
+$\{(X_n, \F_n) : n \geq 1\}$ is a martingale with $\sup_n \E[X_n^2] < \infty$.
+
+$Y_0 = 0$, $Y_n = \sum_{k=1}^{n} a_k (X_k - X_{k-1})$, and $\sum_k a_k^2 < \infty$.
+
+\textbf{Step 1: $\{(Y_n, \F_n) : n \geq 1\}$ is a martingale.}
+
+\begin{proof}
+    \[
+        \E[Y_{n+1} \mid \F_n] = Y_n + a_{n+1} \E[X_{n+1} - X_n \mid \F_n] = Y_n.
+    \]
+    Thus $\{(Y_n, \F_n) : n \geq 1\}$ is a martingale.
+\end{proof}
+
+\textbf{Step 2: $\{Y_n\}$ is $L^2$-bounded.}
+
+\begin{proof}
+    \[
+        \E[Y_n^2] = \E\left[\left(\sum_{k=1}^{n} a_k (X_k - X_{k-1})\right)^2\right] = \E\left[\sum_{k=1}^{n} a_k^2 (X_k - X_{k-1})^2\right] + \E\left[\sum_{k \neq k'} a_k a_{k'} (X_k - X_{k-1})(X_{k'} - X_{k'-1})\right].
+    \]
+
+    \textbf{Diagonal terms:}
+    \[
+        \sum_{k=1}^{n} a_k^2 \, \E\left[(X_k - X_{k-1})^2\right] \leq 4 \sup_n \E[X_n^2] \cdot \sum_{k=1}^{\infty} a_k^2.
+    \]
+
+    \textbf{Off-diagonal terms:} For any $k' < k$,
+    \begin{align*}
+        \E\left[(X_{k'} - X_{k'-1})(X_k - X_{k-1})\right] &= \E\left[\E\left[(X_{k'} - X_{k'-1})(X_k - X_{k-1}) \mid \F_{k-1}\right]\right] \\
+        &= 0.
+    \end{align*}
+
+    Thus $\{(Y_n, \F_n) : n \geq 1\}$ is an $L^2$-bounded martingale. Hence it converges almost surely and in $L^2$.
+\end{proof}
+
+\begin{remark}{Stochastic Integral Analogue}{discrete-stochastic-integral}
+    This is the discrete analogue of a stochastic integral.
+\end{remark}

@@ -1,0 +1,24 @@
+% midterm_practice.tex — STAT 212 Midterm Practice Problems
+
+\begin{enumerate}
+    \item Let $\{X_1, X_2, \cdots\}$ be a sequence of i.i.d.\ Bernoulli random variables with $\Prob[X_1 = 1] = p$. Denote the law of this stochastic process on $(\R^\N, \B_\infty)$ as $\Prob_p$. Prove that for any $p, q \in [0,1]$, $p \neq q$, $\Prob_p$ and $\Prob_q$ are mutually singular, i.e.\ there exists a measurable set $A \in \B_\infty$ such that $\Prob_p(A) = 1$, $\Prob_q(A^c) = 1$.
+
+    \item A two-dimensional Brownian motion $B_t = (B_t^1, B_t^2)$, where $\{B_t^1 : t \geq 0\}$, $\{B_t^2 : t \geq 0\}$ are independent one-dimensional Brownian motions. Let $O \in \R^{2 \times 2}$ be an orthogonal matrix, i.e.\ $O^\mathsf{T} O = O O^\mathsf{T} = I$. Consider a new process $X_t = O B_t$. Prove that $\{X_t : t \geq 0\}$ is a two-dimensional Brownian motion.
+
+    \item Let $T_1, T_2$ be stopping times with respect to a right continuous filtration $\{\F_t^+ : t \geq 0\}$. Prove that $T_1 + T_2$ is also a stopping time.
+
+    \item Let $\{(Y_n, \F_n) : n \geq 0\}$ be a uniformly integrable martingale, with $Y_n \to Y_\infty$ almost surely. Let $T$ be a finite stopping time with respect to the filtration $\{\F_n : n \geq 0\}$. Define the \emph{stopped sigma field}
+    \[
+        \F_T = \{A : A \cap \{T = n\} \in \F_n\}.
+    \]
+    Prove that
+    \[
+        Y_T = \E[Y_\infty \mid \F_T].
+    \]
+
+    \item Let $\{(X_n, \F_n) : n \geq 1\}$ be a martingale with $\sup \E[X_n^2] < \infty$. For any deterministic sequence $\{a_k : k \geq 1\}$, define (with $Y_0 = 0$),
+    \[
+        Y_n = \sum_{k=1}^{n} a_k (X_k - X_{k-1}).
+    \]
+    Prove that if $\sum_k a_k^2 < \infty$, then $Y_n$ converges almost surely and in $L^2$.
+\end{enumerate}
